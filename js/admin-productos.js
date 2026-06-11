@@ -412,7 +412,7 @@
     }
   });
 
-  tableBody.addEventListener('click', (event) => {
+  tableBody.addEventListener('click', async (event) => {
     const button = event.target.closest('button[data-action]');
     if (!button) return;
 
@@ -424,7 +424,9 @@
       fillForm(product);
     }
 
-    if (button.dataset.action === 'delete' && confirm(`Eliminar ${product.code}?`)) {
+    if (button.dataset.action === 'delete') {
+      const ok = await HCConfirm(`¿Eliminar ${product.code}?`, { confirmText: 'Eliminar', danger: true });
+      if (!ok) return;
       saveProducts(products.filter((item) => item.id !== product.id));
       refreshOptions();
       renderProducts();
