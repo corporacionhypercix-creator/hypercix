@@ -1,0 +1,35 @@
+# Dependencias
+node_modules/
+
+# Base de datos SQLite (datos reales — no subir)
+database/*.db
+database/*.db-journal
+database/*.sqlite
+
+# Variables de entorno y secretos
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Respaldos y temporales
+*.bak
+.*.bak
+*.tmp
+*.tmp.js
+
+# Lanzador local de Windows (rutas absolutas, no sirve en el host)
+INICIAR-HYPERCIX.bat
+
+# Herramientas del editor / IDE
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local Netlify folder
+.netlify

@@ -1,0 +1,25 @@
+{
+  "name": "hypercix-web",
+  "version": "1.0.0",
+  "description": "Tienda online + panel administrativo HYPERCIX",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^7.2.0",
+    "sqlite3": "^5.1.7"
+  }
+}

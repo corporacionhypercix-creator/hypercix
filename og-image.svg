@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080810"/>
+      <stop offset="60%" stop-color="#15151F"/>
+      <stop offset="100%" stop-color="#1D1D2A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="80%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="rgba(224,18,51,0.35)"/>
+      <stop offset="55%" stop-color="rgba(224,18,51,0.08)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g transform="translate(70,70)">
+    <rect width="78" height="78" rx="18" fill="#E01233"/>
+    <text x="39" y="56" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="34" text-anchor="middle">HC</text>
+    <text x="105" y="40" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="36">HYPER</text>
+    <text x="262" y="40" fill="#E01233" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="36">CIX</text>
+    <text x="105" y="68" fill="#A6A8BC" font-family="Arial,Helvetica,sans-serif" font-weight="600" font-size="16" letter-spacing="6">DISTRIBUIDOR OFICIAL</text>
+  </g>
+
+  <g transform="translate(70,200)">
+    <text fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="78" letter-spacing="-2">
+      <tspan x="0" y="0">Cámaras CCTV 4K,</tspan>
+      <tspan x="0" y="92">Redes y Cableado.</tspan>
+    </text>
+    <text x="0" y="206" fill="#E01233" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="60">Instalación profesional en Chiclayo</text>
+  </g>
+
+  <g transform="translate(70,500)">
+    <rect width="280" height="64" rx="14" fill="#E01233"/>
+    <text x="140" y="42" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="22" text-anchor="middle">WhatsApp 996 900 982</text>
+
+    <text x="310" y="42" fill="#A6A8BC" font-family="Arial,Helvetica,sans-serif" font-weight="600" font-size="20">Garantía 2 años · Soporte 24/7</text>
+  </g>
+
+  <g transform="translate(870,150)" opacity="0.8">
+    <rect x="-150" y="-50" width="280" height="280" rx="32" fill="rgba(255,255,255,0.04)" stroke="rgba(224,18,51,0.45)" stroke-width="2"/>
+    <g transform="translate(-50,30)" fill="none" stroke="#E01233" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="50" cy="60" r="34"/>
+      <circle cx="50" cy="60" r="12" fill="#E01233"/>
+      <path d="M-10 110 L110 110 L110 165 L-10 165 Z"/>
+      <path d="M50 100 L50 110"/>
+    </g>
+    <text x="-10" y="245" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="16" letter-spacing="3">SEGURIDAD ELECTRÓNICA</text>
+  </g>
+</svg>

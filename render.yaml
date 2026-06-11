@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: hypercix
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: TRUST_PROXY
+        value: 1
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASS
+        sync: false
+    disk:
+      name: hypercix-data
+      mountPath: /opt/render/project/src/database
+      sizeGB: 1

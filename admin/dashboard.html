@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HYPERCIX | Command Center</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23cc0000'/%3E%3Ctext x='16' y='22' fill='%23fff' font-family='Arial' font-weight='800' font-size='13' text-anchor='middle'%3EHC%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="../js/store-sync.js"></script>
+  <script src="../js/ui-kit.js"></script>
+</head>
+<body class="admin-product-page">
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">HC</div>
+      <span>HYPERCIX</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Principal</div>
+      <a class="active" href="dashboard.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="7" height="7" rx="1.5"/><rect x="10" y="1" width="7" height="7" rx="1.5"/><rect x="1" y="10" width="7" height="7" rx="1.5"/><rect x="10" y="10" width="7" height="7" rx="1.5"/></svg></span>
+        Dashboard
+      </a>
+      <a href="productos.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1l7 3.5v9L9 17 2 13.5v-9z"/><path d="M9 1v7.5M2 4.5l7 4 7-4"/></svg></span>
+        Productos
+      </a>
+      <a href="categorias.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1h7v7H1zM10 1h7v7h-7zM1 10h7v7H1zM10 10h7v7h-7z"/></svg></span>
+        Categorías
+      </a>
+      <a href="marcas.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="9,1 11.8,6.6 18,7.5 13.5,11.8 14.6,17.9 9,15 3.4,17.9 4.5,11.8 0,7.5 6.2,6.6"/></svg></span>
+        Marcas
+      </a>
+      <div class="nav-section">Gestión</div>
+      <a href="clientes.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="5" r="3"/><path d="M1 17c0-3.5 2.7-5.5 6-5.5s6 2 6 5.5"/><circle cx="14" cy="6" r="2"/><path d="M17 17c0-2-1-4-3-4.5"/></svg></span>
+        Clientes
+      </a>
+      <a href="cotizaciones.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 1H4a1 1 0 00-1 1v14a1 1 0 001 1h10a1 1 0 001-1V6z"/><path d="M10 1v5h5M6 10h6M6 13h4"/></svg></span>
+        Cotizaciones
+      </a>
+      <a href="inventario.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12l8 4 8-4M1 8l8 4 8-4M9 1L1 5l8 4 8-4z"/></svg></span>
+        Inventario
+      </a>
+      <a href="banners.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="16" height="12" rx="2"/><path d="M1 7h16"/></svg></span>
+        Banners
+      </a>
+      <div class="nav-section">Sistema</div>
+      <a href="tipocambio.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l4-4 3 3 5-6"/><circle cx="14" cy="7" r="2"/></svg></span>
+        Tipo Cambio
+      </a>
+      <a href="configuracion.html">
+        <span class="nav-icon"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2.5"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.1 3.1l1.4 1.4M13.5 13.5l1.4 1.4M14.9 3.1l-1.4 1.4M4.5 13.5l-1.4 1.4"/></svg></span>
+        Configuración
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <span style="color:var(--success);font-size:0.6rem">●</span> Sistema activo
+      <a href="../public/index.html" style="margin-left:auto">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="width:13px;height:13px;vertical-align:middle"><path d="M10 3h3a1 1 0 011 1v8a1 1 0 01-1 1h-3M7 11l4-3-4-3M1 8h9"/></svg>
+        Salir
+      </a>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="admin-title">
+        <p id="current-date">PANEL DE CONTROL</p>
+        <h1>Dashboard</h1>
+      </div>
+      <div class="admin-actions">
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Menu">
+          <svg viewBox="0 0 18 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:18px;height:14px"><line x1="0" y1="2" x2="18" y2="2"/><line x1="0" y1="7" x2="18" y2="7"/><line x1="0" y1="12" x2="18" y2="12"/></svg>
+        </button>
+        <span class="topbar-clock" id="live-clock">--:--:--</span>
+        <button type="button" class="toolbar-button" id="theme-button">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="width:13px;height:13px;vertical-align:middle"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.1 3.1l1.4 1.4M11.5 11.5l1.4 1.4M11.5 4.5l1.4-1.4M3.1 12.9l1.4-1.4"/></svg>
+          Tema
+        </button>
+        <a class="toolbar-button" href="../public/index.html#catalogo" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:middle"><path d="M1 1h2l2.5 8h7L14 4H4"/><circle cx="7" cy="13.5" r="1.2"/><circle cx="12" cy="13.5" r="1.2"/></svg>
+          Ver tienda
+        </a>
+      </div>
+    </header>
+
+  <main class="display-container">
+
+    <!-- Encabezado de seccion -->
+    <div class="dash-head">
+      <div>
+        <h2 class="dash-title">Resumen general</h2>
+        <p class="dash-subtitle">Indicadores de productos, stock, clientes y cotizaciones.</p>
+      </div>
+      <a class="btn-primary dash-cta" href="productos.html">&#43; Nuevo producto</a>
+    </div>
+
+    <div class="alert-bar info" id="live-alert">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:12px;height:12px;vertical-align:middle;flex-shrink:0"><circle cx="7" cy="7" r="6"/><path d="M7 6v4"/><circle cx="7" cy="4" r="0.5" fill="currentColor"/></svg>
+      Sistema operativo. Los cambios se reflejan automáticamente en la tienda.
+    </div>
+
+    <!-- KPIs -->
+    <div class="display-grid" id="kpi-grid">
+      <div class="display-card accent-red">
+        <div class="card-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 1l9 4.5v11L11 21 2 16.5v-11z"/><path d="M11 1v9.5M2 5.5l9 5 9-5"/></svg>
+        </div>
+        <p class="card-value" id="kpi-products">0</p>
+        <p class="card-label">Productos</p>
+        <p class="card-trend" id="trend-products"></p>
+      </div>
+      <div class="display-card accent-green">
+        <div class="card-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14l5-5 4 4 5-7"/><circle cx="17" cy="8" r="2.5"/></svg>
+        </div>
+        <p class="card-value" id="kpi-stock">0</p>
+        <p class="card-label">Unidades en stock</p>
+        <p class="card-trend" id="trend-stock"></p>
+      </div>
+      <div class="display-card accent-amber">
+        <div class="card-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2L2 19h18z"/><line x1="11" y1="9" x2="11" y2="13"/><circle cx="11" cy="16.5" r="0.8" fill="currentColor"/></svg>
+        </div>
+        <p class="card-value" id="kpi-lowstock">0</p>
+        <p class="card-label">Alertas de stock</p>
+        <p class="card-trend" id="trend-lowstock"></p>
+      </div>
+      <div class="display-card accent-cyan">
+        <div class="card-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="6" r="3.5"/><path d="M1 20c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/><circle cx="17" cy="7" r="2.5"/><path d="M20 20c0-2.5-1.2-5-3.5-5.5"/></svg>
+        </div>
+        <p class="card-value" id="kpi-clients">0</p>
+        <p class="card-label">Clientes</p>
+        <p class="card-trend" id="trend-clients"></p>
+      </div>
+      <div class="display-card accent-purple">
+        <div class="card-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 1H5a1.5 1.5 0 00-1.5 1.5v17A1.5 1.5 0 005 21h12a1.5 1.5 0 001.5-1.5V6.5z"/><path d="M13 1v5.5H18.5M7 11.5h8M7 15h5"/></svg>
+        </div>
+        <p class="card-value" id="kpi-quotes">0</p>
+        <p class="card-label">Cotizaciones</p>
+        <p class="card-trend" id="trend-quotes"></p>
+      </div>
+      <div class="display-card accent-red">
+        <div class="card-icon">
+          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1h9v9H1zM12 1h9v9h-9zM1 12h9v9H1zM12 12h9v9h-9z"/></svg>
+        </div>
+        <p class="card-value" id="kpi-categories">0</p>
+        <p class="card-label">Categorías</p>
+        <p class="card-trend" id="trend-categories"></p>
+      </div>
+    </div>
+
+    <!-- Tablas: ultimos productos + cotizaciones recientes -->
+    <div class="display-row">
+      <div class="display-panel">
+        <div class="panel-title">
+          <h3>Últimos productos</h3>
+          <a class="panel-link" href="productos.html">Ver todos &rarr;</a>
+        </div>
+        <div class="panel-body no-pad">
+          <table class="dash-table">
+            <thead>
+              <tr><th>Producto</th><th>Código</th><th>Categoría</th><th class="ta-right">Stock</th></tr>
+            </thead>
+            <tbody id="recent-products">
+              <tr><td colspan="4" class="dash-empty">No hay productos registrados</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="display-panel">
+        <div class="panel-title">
+          <h3>Cotizaciones recientes</h3>
+          <a class="panel-link" href="cotizaciones.html">Ver todas &rarr;</a>
+        </div>
+        <div class="panel-body no-pad">
+          <table class="dash-table">
+            <thead>
+              <tr><th>Cliente</th><th>Producto</th><th class="ta-right">Monto</th><th class="ta-center">Estado</th></tr>
+            </thead>
+            <tbody id="recent-quotes">
+              <tr><td colspan="4" class="dash-empty">Aún no hay cotizaciones</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alertas de stock + agregar rapido -->
+    <div class="display-row">
+      <div class="display-panel">
+        <div class="panel-title">
+          <h3>Alertas de inventario</h3>
+          <span class="badge red" id="alert-count">0</span>
+        </div>
+        <div class="panel-body no-pad">
+          <table class="dash-table">
+            <thead>
+              <tr><th>Producto</th><th>Código</th><th class="ta-right">Stock</th></tr>
+            </thead>
+            <tbody id="low-stock-list">
+              <tr><td colspan="3" class="dash-empty">Sin alertas de stock bajo</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="display-panel">
+        <div class="panel-title">
+          <h3>Agregar producto rápido</h3>
+          <span class="badge green">Directo</span>
+        </div>
+        <div class="panel-body">
+          <form class="quick-form" id="dashboard-form">
+            <div class="qf-row">
+              <div class="qf-field">
+                <label>Nombre</label>
+                <input type="text" id="qf-name" placeholder="Nombre del producto" required />
+              </div>
+              <div class="qf-field">
+                <label>Categoría</label>
+                <input type="text" id="qf-category" placeholder="Ej: Cámaras" required />
+              </div>
+            </div>
+            <div class="qf-row">
+              <div class="qf-field">
+                <label>Marca</label>
+                <input type="text" id="qf-brand" placeholder="Ej: Hikvision" required />
+              </div>
+              <div class="qf-field">
+                <label>Precio (S/)</label>
+                <input type="number" id="qf-price" placeholder="0.00" min="0" step="0.01" required />
+              </div>
+            </div>
+            <div class="qf-row">
+              <div class="qf-field">
+                <label>Stock</label>
+                <input type="number" id="qf-stock" placeholder="0" min="0" required />
+              </div>
+              <div class="qf-field">
+                <label>Código SKU</label>
+                <input type="text" id="qf-sku" placeholder="Ej: CAM-001" required />
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top:0.5rem;">
+              <button type="submit" class="btn-primary">&#10003; Guardar producto</button>
+              <button type="button" class="btn-secondary" id="qf-clear">Limpiar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="display-footer">
+      HYPERCIX &mdash; Los cambios se reflejan automáticamente en <a href="../tienda/index.html">la tienda</a> &mdash; <span id="footer-time"></span>
+    </div>
+
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'hypercix-admin-products';
+    const CLIENT_KEY = 'hypercix-admin-clients';
+    const QUOTE_KEY = 'hypercix-admin-quotes';
+    const CATEGORY_DATA_KEY = 'hypercix-admin-categories-data';
+    const CATEGORY_FLAT_KEY = 'hypercix-admin-categories';
+
+    function readJSON(k, fb) { try { const s = localStorage.getItem(k); return s ? JSON.parse(s) : fb; } catch { return fb; } }
+    function writeJSON(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+    function getProducts() { return readJSON(STORAGE_KEY, []); }
+    function getClients() { return readJSON(CLIENT_KEY, []); }
+    function getQuotes() { return readJSON(QUOTE_KEY, []); }
+    function getCategories() { return readJSON(CATEGORY_DATA_KEY, []); }
+
+    function normalizeProduct(p, i) {
+      return {
+        id: p.id || 'p-' + Date.now() + '-' + i,
+        code: p.code || p.sku || 'PROD-' + String(i+1).padStart(3,'0'),
+        description: p.description || p.name || 'Producto',
+        category: p.category || 'General',
+        brand: p.brand || 'Sin marca',
+        price: Number(p.price || 0),
+        stock: Number(p.stock || 0),
+        taxType: p.taxType || 'gravado',
+        image: p.image || '',
+        color: p.color || '#1a1a2e',
+      };
+    }
+
+    const SNAPSHOT_KEY = 'hypercix-admin-dash-snapshot';
+
+    function trendHTML(current, previous, label) {
+      if (previous === 0) return '<span class="trend neutral">' + current + ' ' + label + '</span>';
+      const diff = current - previous;
+      const pct = Math.round((diff / previous) * 100);
+      const cls = diff > 0 ? 'up' : diff < 0 ? 'down' : 'neutral';
+      const arrow = diff > 0 ? '&#9650;' : diff < 0 ? '&#9660;' : '&#9644;';
+      return '<span class="trend ' + cls + '">' + arrow + ' ' + Math.abs(pct) + '% vs anterior</span>';
+    }
+
+    function updateDashboard() {
+      const products = getProducts();
+      const clients = getClients();
+      const quotes = getQuotes();
+      const categories = getCategories();
+
+      const totalStock = products.reduce((s, p) => s + Number(p.stock || 0), 0);
+      const lowStock = products.filter(p => Number(p.stock || 0) <= 5);
+      const recent = products.slice().reverse().slice(0, 8);
+
+      const esc = (v) => String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      const money = (v) => 'S/ ' + Number(v || 0).toFixed(2);
+
+      document.getElementById('kpi-products').textContent = products.length;
+      document.getElementById('kpi-stock').textContent = totalStock;
+      document.getElementById('kpi-lowstock').textContent = lowStock.length;
+      document.getElementById('kpi-clients').textContent = clients.length;
+      document.getElementById('kpi-quotes').textContent = quotes.length;
+      document.getElementById('kpi-categories').textContent = categories.length;
+      document.getElementById('alert-count').textContent = lowStock.length;
+
+      const snap = readJSON(SNAPSHOT_KEY, {});
+      if (snap.products !== undefined) {
+        document.getElementById('trend-products').innerHTML = trendHTML(products.length, snap.products, '');
+        document.getElementById('trend-stock').innerHTML = trendHTML(totalStock, snap.stock, '');
+        document.getElementById('trend-lowstock').innerHTML = trendHTML(lowStock.length, snap.lowstock, '');
+        document.getElementById('trend-clients').innerHTML = trendHTML(clients.length, snap.clients, '');
+        document.getElementById('trend-quotes').innerHTML = trendHTML(quotes.length, snap.quotes, '');
+        document.getElementById('trend-categories').innerHTML = trendHTML(categories.length, snap.categories, '');
+      }
+      writeJSON(SNAPSHOT_KEY, {
+        products: products.length,
+        stock: totalStock,
+        lowstock: lowStock.length,
+        clients: clients.length,
+        quotes: quotes.length,
+        categories: categories.length,
+      });
+
+      const alertBar = document.getElementById('live-alert');
+      if (lowStock.length > 0) {
+        alertBar.className = 'alert-bar danger';
+        alertBar.innerHTML = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:12px;height:12px;vertical-align:middle;flex-shrink:0"><path d="M7 1L1 12h12z"/><line x1="7" y1="6" x2="7" y2="9"/><circle cx="7" cy="11" r="0.5" fill="currentColor"/></svg> Alerta: ' + lowStock.length + ' producto(s) con stock bajo. Revisa el inventario.';
+      } else {
+        alertBar.className = 'alert-bar success';
+        alertBar.innerHTML = '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:12px;height:12px;vertical-align:middle;flex-shrink:0"><polyline points="2,7 6,11 12,3"/></svg> Sistema operativo. Todos los productos con stock suficiente.';
+      }
+
+      // Tabla: ultimos productos
+      const recentEl = document.getElementById('recent-products');
+      if (!recent.length) {
+        recentEl.innerHTML = '<tr><td colspan="4" class="dash-empty">No hay productos registrados</td></tr>';
+      } else {
+        recentEl.innerHTML = recent.slice(0, 6).map(p => {
+          const st = p.stock <= 0 ? 'out' : p.stock <= 5 ? 'low' : 'ok';
+          return '<tr>' +
+            '<td><strong>' + esc(p.description) + '</strong></td>' +
+            '<td><span class="mono-tag">' + esc(p.code) + '</span></td>' +
+            '<td>' + esc(p.category) + '</td>' +
+            '<td class="ta-right"><span class="dp-stock ' + st + '">' + p.stock + '</span></td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      // Tabla: cotizaciones recientes (incluye las de la tienda)
+      const quotesEl = document.getElementById('recent-quotes');
+      if (!quotes.length) {
+        quotesEl.innerHTML = '<tr><td colspan="4" class="dash-empty">Aún no hay cotizaciones</td></tr>';
+      } else {
+        quotesEl.innerHTML = quotes.slice(0, 6).map(q => {
+          const stc = q.status === 'aprobada' ? 'ok' : q.status === 'rechazada' ? 'out' : 'low';
+          const src = q.source === 'tienda' ? ' <span class="src-tag">tienda</span>' : '';
+          return '<tr>' +
+            '<td><strong>' + esc(q.client) + '</strong>' + src + '</td>' +
+            '<td>' + esc(q.product) + '</td>' +
+            '<td class="ta-right">' + money(q.amount) + '</td>' +
+            '<td class="ta-center"><span class="status-pill ' + stc + '">' + esc(q.status || 'pendiente') + '</span></td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      // Tabla: alertas de stock
+      const lowEl = document.getElementById('low-stock-list');
+      if (!lowStock.length) {
+        lowEl.innerHTML = '<tr><td colspan="3" class="dash-empty">Sin alertas de stock bajo</td></tr>';
+      } else {
+        lowEl.innerHTML = lowStock.slice(0, 8).map(p => {
+          return '<tr>' +
+            '<td><strong>' + esc(p.description) + '</strong></td>' +
+            '<td><span class="mono-tag">' + esc(p.code) + '</span></td>' +
+            '<td class="ta-right"><span class="dp-stock low">' + p.stock + ' uds</span></td>' +
+            '</tr>';
+        }).join('');
+      }
+    }
+
+    function liveClock() {
+      const now = new Date();
+      document.getElementById('live-clock').textContent = now.toLocaleTimeString('es-PE', { hour12: false });
+    }
+
+    document.getElementById('dashboard-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const products = getProducts();
+      const p = normalizeProduct({
+        id: 'dash-' + Date.now(),
+        code: document.getElementById('qf-sku').value.trim(),
+        description: document.getElementById('qf-name').value.trim(),
+        category: document.getElementById('qf-category').value.trim(),
+        brand: document.getElementById('qf-brand').value.trim(),
+        price: Number(document.getElementById('qf-price').value),
+        stock: Number(document.getElementById('qf-stock').value),
+      }, products.length);
+      products.push(p);
+      writeJSON(STORAGE_KEY, products);
+
+      const catName = p.category;
+      const cats = getCategories();
+      if (!cats.find(c => c.name === catName)) {
+        cats.push({ id: 'cat-' + Date.now(), name: catName, description: '' });
+        writeJSON(CATEGORY_DATA_KEY, cats);
+        writeJSON(CATEGORY_FLAT_KEY, cats.map(c => c.name));
+      }
+
+      this.reset();
+      updateDashboard();
+    });
+
+    document.getElementById('qf-clear').addEventListener('click', function() {
+      document.getElementById('dashboard-form').reset();
+    });
+
+    const themeBtn = document.getElementById('theme-button');
+    if (localStorage.getItem('hypercix-admin-theme') === 'light') document.body.classList.add('light-admin');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-admin');
+      localStorage.setItem('hypercix-admin-theme', document.body.classList.contains('light-admin') ? 'light' : 'dark');
+    });
+
+    document.getElementById('sidebar-toggle').addEventListener('click', function() {
+      document.querySelector('.admin-sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('visible');
+    });
+    document.getElementById('sidebar-overlay').addEventListener('click', function() {
+      document.querySelector('.admin-sidebar').classList.remove('open');
+      this.classList.remove('visible');
+    });
+
+    document.getElementById('current-date').textContent = 'HYPERCIX CONTROL PANEL · ' + new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase();
+    updateDashboard();
+    liveClock();
+    setInterval(liveClock, 1000);
+    setInterval(updateDashboard, 5000);
+  </script>
+  </div><!-- /admin-main -->
+</div><!-- /admin-layout -->
+</body>
+</html>
