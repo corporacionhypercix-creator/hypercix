@@ -112,10 +112,10 @@ h3{font-size:1rem;font-weight:600}
 /* HEADER */
 header{background:rgba(10,10,10,.95);backdrop-filter:blur(28px) saturate(1.4);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:200}
 .nav-in{max-width:1260px;margin:0 auto;padding:0 1.75rem;display:flex;align-items:center;gap:1.8rem;height:66px}
-.nav-links{display:flex;align-items:center;gap:.1rem;flex:1;margin-left:.5rem}
-.nav-links a{padding:.46rem .88rem;color:rgba(255,255,255,.7);font-size:.78rem;font-weight:500;border-radius:var(--rad);transition:all .2s;white-space:nowrap}
-.nav-links a:hover,.nav-links a.act{color:#fff;background:rgba(255,255,255,.07)}
-.nav-links a.act{color:var(--r);background:rgba(198,40,40,.15)}
+.menu-navegacion{display:flex;align-items:center;gap:.1rem;flex:1;margin-left:.5rem}
+.menu-navegacion .enlace-menu{padding:.46rem .88rem;color:rgba(255,255,255,.7);font-size:.78rem;font-weight:500;border-radius:var(--rad);transition:all .2s;white-space:nowrap;text-decoration:none}
+.menu-navegacion .enlace-menu:hover{color:#fff;background:rgba(255,255,255,.07)}
+.menu-navegacion .enlace-menu.activo{color:var(--r);background:rgba(198,40,40,.15)}
 .dd{position:relative}
 .dd>a{display:flex;align-items:center;gap:.28rem}
 .dd>a svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
@@ -135,7 +135,7 @@ header{background:rgba(10,10,10,.95);backdrop-filter:blur(28px) saturate(1.4);bo
 .mob-toggle{display:none;width:38px;height:38px;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--rad);color:var(--t2)}
 .mob-toggle svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 /* SEARCH */
-.search-bar{background:var(--s1);border-bottom:1px solid var(--bdr)}
+.search-bar{background:rgba(15,15,24,.96);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--bdr);position:sticky;top:66px;z-index:160}
 .search-in{max-width:1260px;margin:0 auto;padding:.65rem 1.75rem;display:flex;align-items:center;gap:.75rem}
 .search-wrap{flex:1;max-width:680px;position:relative}
 .search-wrap input{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--rad);color:var(--t1);font:.82rem var(--f);padding:.6rem .9rem .6rem 2.5rem;outline:none;transition:all .2s}
@@ -154,7 +154,7 @@ header{background:rgba(10,10,10,.95);backdrop-filter:blur(28px) saturate(1.4);bo
 .search-clr{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--t3);cursor:pointer;display:none;font-size:1rem;line-height:1}
 .search-clr.on{display:block}
 /* SUBNAV */
-.subnav{background:var(--s1);border-bottom:1px solid var(--bdr);position:sticky;top:66px;z-index:150}
+.subnav{background:rgba(15,15,24,.96);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--bdr);position:sticky;top:125px;z-index:150}
 .subnav-in{max-width:1260px;margin:0 auto;padding:0 1.75rem;display:flex;align-items:center;height:38px;overflow-x:auto;scrollbar-width:none}
 .subnav-in::-webkit-scrollbar{display:none}
 .subnav-in a{font-size:.63rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);height:100%;display:flex;align-items:center;padding:0 .88rem;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
@@ -163,7 +163,7 @@ header{background:rgba(10,10,10,.95);backdrop-filter:blur(28px) saturate(1.4);bo
 .snv-cta{margin-left:auto;display:flex;align-items:center;gap:.35rem;background:var(--r);color:#fff;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:.28rem .88rem;border-radius:4px;white-space:nowrap;transition:background .2s;flex-shrink:0;box-shadow:0 0 12px var(--rs)}
 .snv-cta:hover{background:var(--r2)}.snv-cta svg{width:9px;height:9px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
 /* TABS */
-.tabs{background:var(--s1);border-bottom:2px solid var(--bdr);position:sticky;top:104px;z-index:140}
+.tabs{background:rgba(15,15,24,.96);backdrop-filter:blur(20px) saturate(1.4);border-bottom:2px solid var(--bdr);position:sticky;top:164px;z-index:140}
 .tabs-in{max-width:1260px;margin:0 auto;padding:0 1.75rem;display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
 .tabs-in::-webkit-scrollbar{display:none}
 .tab{padding:.82rem 1.2rem;border:none;background:none;color:var(--t3);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:.38rem}
@@ -662,7 +662,7 @@ html.sim-active .dev-sim-toggle{background:rgba(198,40,40,.15);border-color:var(
 html.sim-active .dev-sim{display:flex;top:auto;bottom:1.2rem;left:50%;transform:translateX(-50%)}
 @media(max-width:1100px){.pgrid{grid-template-columns:repeat(3,1fr)}.blgrid{grid-template-columns:repeat(2,1fr)}.f-main{grid-template-columns:1fr 1fr}}
 @media(max-width:900px){
-  .nav-links{display:none}.mob-toggle{display:flex}
+  .menu-navegacion{display:none}.mob-toggle{display:flex}
   .hero-in{grid-template-columns:1fr}.sg{grid-template-columns:repeat(2,1fr)}
   .benef-g{grid-template-columns:repeat(2,1fr)}.pgrid{grid-template-columns:repeat(2,1fr)}
   .test-grid{grid-template-columns:1fr}.steps-grid{grid-template-columns:repeat(2,1fr)}.steps-grid::before{display:none}
@@ -939,18 +939,18 @@ a,button,.pcard,.sc,.pill,.tab,.blcard,.solcard{transition:all .25s ease}
   <text x="160" y="57" style="font-family:'Arial Black',Arial,sans-serif;font-weight:700;font-size:16px;fill:#333;letter-spacing:2.5px">CIX</text>
 </svg>
 </div>
-<nav class="nav-links">
-  <a href="#" class="act" onclick="goTab('inicio');return false">Inicio</a>
+<nav class="menu-navegacion">
+  <a href="#inicio" class="enlace-menu activo" onclick="goTab('inicio');return false">Inicio</a>
   <div class="dd">
-    <a href="#" onclick="goTab('catalogo');return false">Tienda <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
+    <a href="#catalogo" class="enlace-menu" onclick="goTab('catalogo');return false">Catálogo <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></a>
     <div class="dd-menu" id="headerDropdown"></div>
   </div>
-  <a href="#" onclick="goTab('marcas');return false">Marcas</a>
-  <a href="#" onclick="goTab('soluciones');return false">Soluciones</a>
-  <a href="#" onclick="goTab('servicios');return false">Servicios</a>
-  <a href="#" onclick="goTab('nosotros');return false">Nosotros</a>
-  <a href="#" onclick="goTab('contacto');return false">Contacto</a>
-  <a href="/admin/dashboard.html" target="_blank" class="nav-admin-link" style="font-size:.72rem;opacity:.55">Admin</a>
+  <a href="#marcas" class="enlace-menu" onclick="goTab('marcas');return false">Marcas</a>
+  <a href="#soluciones" class="enlace-menu" onclick="goTab('soluciones');return false">Soluciones</a>
+  <a href="#servicios" class="enlace-menu" onclick="goTab('servicios');return false">Servicios</a>
+  <a href="#nosotros" class="enlace-menu" onclick="goTab('nosotros');return false">Nosotros</a>
+  <a href="#contacto" class="enlace-menu" onclick="goTab('contacto');return false">Contacto</a>
+  <a href="/admin/dashboard.html" target="_blank" class="enlace-menu nav-admin-link" style="font-size:.72rem;opacity:.55">Admin</a>
 </nav>
 <div class="nav-r">
   <button class="cart-btn" onclick="openCart()"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></button>
@@ -1731,10 +1731,10 @@ function placeOrder(){
 function goTab(id){
   document.querySelectorAll(".pane").forEach(p=>p.classList.remove("on"));
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));
-  document.querySelectorAll(".nav-links a").forEach(a=>a.classList.remove("act"));
+  document.querySelectorAll(".menu-navegacion a").forEach(a=>a.classList.remove("activo"));
   const pane=document.getElementById("pane-"+id);if(pane)pane.classList.add("on");
   const tab=document.querySelector(`.tab[data-tab="${id}"]`);if(tab)tab.classList.add("on");
-  const navA=document.querySelector(`.nav-links a[onclick*="'${id}'"]`);if(navA)navA.classList.add("act");
+  const navA=document.querySelector(`.menu-navegacion a[onclick*="'${id}'"]`);if(navA)navA.classList.add("activo");
   window.scrollTo({top:0,behavior:"smooth"});
   if(id==="checkout")updateSummary();
   if(id==="nosotros")renderClients();
