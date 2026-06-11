@@ -71,7 +71,7 @@
   --rad:8px;--rad2:14px;--rad3:18px;
 }
 html{scroll-behavior:smooth;font-size:16px}
-body{font-family:var(--f);background:#FFFFFF;color:var(--t1);line-height:1.7;overflow-x:hidden}
+body{font-family:var(--f);background-color:#050816;background-image:linear-gradient(135deg,#050816 0%,#0B1120 50%,#121A2E 100%);background-attachment:fixed;color:var(--t1);line-height:1.7;overflow-x:hidden;min-height:100vh}
 a{text-decoration:none;color:inherit;transition:color .2s}img{max-width:100%;display:block}button{font-family:var(--f);cursor:pointer}
 ::selection{background:var(--r);color:#fff}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--r);border-radius:2px}
@@ -212,7 +212,9 @@ header{background:rgba(10,10,10,.95);backdrop-filter:blur(28px) saturate(1.4);bo
 .ticker::before,.ticker::after{content:"";position:absolute;top:0;bottom:0;width:50px;z-index:2}
 .ticker::before{left:0;background:linear-gradient(to right,var(--r),transparent)}
 .ticker::after{right:0;background:linear-gradient(to left,var(--r),transparent)}
-.ticker-track{display:flex;gap:2.5rem;animation:ticker 25s linear infinite;white-space:nowrap}
+.ticker-track{display:flex;gap:2.5rem;animation:ticker 45s linear infinite;white-space:nowrap;will-change:transform}
+.ticker:hover .ticker-track{animation-play-state:paused;cursor:pointer}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation-duration:120s}}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ticker-item{font-size:.8rem;font-weight:700;color:rgba(255,255,255,.82);text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;gap:.65rem}
 .ticker-item::before{content:"✦";color:rgba(255,255,255,.4);font-size:.52rem}
