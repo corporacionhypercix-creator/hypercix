@@ -291,7 +291,7 @@ app.use(express.static(ROOT, {
 }));
 
 // Rutas amigables
-app.get('/', (req, res) => res.redirect('/public/index.html'));
+app.get('/', (req, res) => res.redirect('/public/index.html#catalogo'));
 app.get('/admin', (req, res) => res.redirect('/admin/dashboard.html'));
 // 404 (sin reflejar la ruta del usuario en el HTML, evita XSS reflejado)
 app.use((req, res) => {
