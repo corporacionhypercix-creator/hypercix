@@ -293,8 +293,6 @@ app.use(express.static(ROOT, {
 // Rutas amigables
 app.get('/', (req, res) => res.redirect('/public/index.html'));
 app.get('/admin', (req, res) => res.redirect('/admin/dashboard.html'));
-app.get('/tienda', (req, res) => res.redirect('/tienda/index.html'));
-
 // 404 (sin reflejar la ruta del usuario en el HTML, evita XSS reflejado)
 app.use((req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Ruta no encontrada' });
