@@ -273,8 +273,8 @@ app.get('/api/health', (req, res) => {
 });
 
 // ─── ARCHIVOS ESTATICOS ───────────────────────────────
-// Estaticos: HTML siempre fresco (max-age=0, must-revalidate),
-// CSS/JS/imagenes con cache de 7 dias (el navegador valida con ETag).
+// Estaticos: HTML y JS siempre frescos (max-age=0, must-revalidate),
+// CSS/imagenes con cache de 7 dias (el navegador valida con ETag).
 app.use(express.static(ROOT, {
   extensions: ['html'],
   dotfiles: 'ignore',
@@ -282,9 +282,9 @@ app.use(express.static(ROOT, {
   lastModified: true,
   setHeaders: function (res, filePath) {
     const ext = path.extname(filePath).toLowerCase();
-    if (ext === '.html') {
+    if (ext === '.html' || ext === '.js') {
       res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
-    } else if (['.css', '.js', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.woff', '.woff2', '.json'].includes(ext)) {
+    } else if (['.css', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.woff', '.woff2', '.json'].includes(ext)) {
       res.setHeader('Cache-Control', 'public, max-age=604800'); // 7 dias
     }
   }
