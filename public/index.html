@@ -1497,9 +1497,11 @@ function renderClients(){
 }
 function renderBrandCards(){
   const el=document.getElementById("marcasGrid");if(!el)return;
-  const brands=getBrands();
-  const countEl=document.getElementById("marcaCount");if(countEl)countEl.textContent=brands.length;
-  if(!brands.length){el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--t3)">Aún no hay marcas registradas.</div>';return;}
+  let adminBrands=[];
+  try{const r=localStorage.getItem(ADMIN_BRANDS_KEY);if(r){const p=JSON.parse(r);if(Array.isArray(p))adminBrands=p;}}catch(e){}
+  const brandNames=adminBrands.length?adminBrands.map(b=>typeof b==='string'?b:b.name||'').filter(Boolean):getBrands();
+  const countEl=document.getElementById("marcaCount");if(countEl)countEl.textContent=brandNames.length;
+  if(!brandNames.length){el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--t3)">Aún no hay marcas registradas.</div>';return;}
   const subtitleMap={
     Hikvision:'CCTV y Seguridad',
     Dahua:'CCTV y Seguridad',
@@ -1515,7 +1517,7 @@ function renderBrandCards(){
     Dell:'Infraestructura TI',
     Lenovo:'Infraestructura TI'
   };
-  el.innerHTML=brands.map(b=>{
+  el.innerHTML=brandNames.map(b=>{
     const count=PRODS.filter(p=>p.brand===b).length;
     const logo=brandImage(b);
     const subtitle=subtitleMap[b]||subtitleMap[b.toLowerCase()]||'Distribuidor Oficial';
