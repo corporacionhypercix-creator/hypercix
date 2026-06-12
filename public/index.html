@@ -1497,9 +1497,9 @@ function renderClients(){
 }
 function renderBrandCards(){
   const el=document.getElementById("marcasGrid");if(!el)return;
-  let adminBrands=[];
+  let adminBrands=null;
   try{const r=localStorage.getItem(ADMIN_BRANDS_KEY);if(r){const p=JSON.parse(r);if(Array.isArray(p))adminBrands=p;}}catch(e){}
-  const brandNames=adminBrands.length?adminBrands.map(b=>typeof b==='string'?b:b.name||'').filter(Boolean):getBrands();
+  const brandNames=adminBrands!==null?adminBrands.map(b=>typeof b==='string'?b:b.name||'').filter(Boolean):getBrands();
   const countEl=document.getElementById("marcaCount");if(countEl)countEl.textContent=brandNames.length;
   if(!brandNames.length){el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--t3)">Aún no hay marcas registradas.</div>';return;}
   const subtitleMap={
