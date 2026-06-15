@@ -93,8 +93,22 @@ function initDatabase() {
       pass TEXT,
       role TEXT,
       created_at TEXT
+    )`);
+    // Sesiones persistentes: sobreviven a reinicios/sleeps del free tier.
+    db.run(`CREATE TABLE IF NOT EXISTS sessions (
+      token TEXT PRIMARY KEY,
+      username TEXT NOT NULL,
+      role TEXT,
+      created_at INTEGER NOT NULL
     )`, () => {
-      seedDefaults();
+      // Cargar sesiones existentes a memoria (cache rapida)
+      db.all('SELECT token, username, role, created_at FROM sessions', (err, rows) => {
+        if (!err && rows) {
+          rows.forEach((r) => sessions.set(r.token, { username: r.username, role: r.role, createdAt: r.created_at }));
+          if (rows.length) console.log('Sesiones cargadas:', rows.length);
+        }
+        seedDefaults();
+      });
     });
   });
 }
@@ -154,7 +168,11 @@ app.post('/api/login', loginLimiter, (req, res) => {
       return res.status(401).json({ error: 'Credenciales incorrectas' });
     }
     const token = makeToken();
-    sessions.set(token, { username: user.username, role: user.role, createdAt: Date.now() });
+    const now = Date.now();
+    sessions.set(token, { username: user.username, role: user.role, createdAt: now });
+    // Persistir en SQLite para que sobreviva reinicios del free tier
+    db.run('INSERT INTO sessions (token, username, role, created_at) VALUES (?, ?, ?, ?)',
+      [token, user.username, user.role, now]);
     res.json({ success: true, token, user: { username: user.username, role: user.role } });
   });
 });
@@ -162,8 +180,17 @@ app.post('/api/login', loginLimiter, (req, res) => {
 app.post('/api/logout', requireAuth, (req, res) => {
   const token = req.headers['x-auth-token'];
   sessions.delete(token);
+  db.run('DELETE FROM sessions WHERE token = ?', [token]);
   res.json({ success: true });
 });
+
+// Limpieza periodica de sesiones viejas (mayores a 30 dias)
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+setInterval(() => {
+  const cutoff = Date.now() - SESSION_TTL_MS;
+  for (const [t, s] of sessions) if (s.createdAt < cutoff) sessions.delete(t);
+  db.run('DELETE FROM sessions WHERE created_at < ?', [cutoff]);
+}, 6 * 60 * 60 * 1000); // cada 6 horas
 
 app.get('/api/me', requireAuth, (req, res) => {
   res.json({ user: req.session });
