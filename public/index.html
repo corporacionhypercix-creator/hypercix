@@ -193,6 +193,22 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
 .bpill.active{background:var(--s3);border-color:var(--r);color:var(--t1)}
 .bpill .dot{width:7px;height:7px;border-radius:50%;background:var(--t3)}
 .bpill.active .dot{background:var(--bp-c,var(--r));box-shadow:0 0 8px var(--bp-c,var(--r))}
+.bpill-logo{width:20px;height:20px;border-radius:4px;object-fit:contain;background:#fff;padding:2px;flex-shrink:0}
+
+/* Brand strip prominente con logos grandes */
+.brand-strip{background:var(--s1);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:2.2rem 0 2.4rem}
+.brand-strip-head{text-align:center;margin-bottom:1.5rem;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.brand-strip-head .cat-eyebrow{justify-content:center}
+.brand-strip-head h3{font-size:1.25rem;font-weight:700;color:var(--t1);letter-spacing:-.01em}
+.brand-strip-grid{display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap}
+.brand-tile{display:flex;align-items:center;justify-content:center;width:140px;height:74px;background:#fff;border:1px solid var(--bdr);border-radius:12px;padding:.7rem 1rem;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s;overflow:hidden}
+.brand-tile:hover{transform:translateY(-2px);border-color:var(--rs);box-shadow:0 8px 20px rgba(224,18,51,.18)}
+.brand-tile img{max-width:100%;max-height:100%;object-fit:contain;filter:none}
+.brand-tile-fallback{font-weight:700;color:var(--t1);font-size:.85rem;letter-spacing:.03em}
+
+/* Logo dentro del badge brand en cards */
+.tag-brand.has-logo{padding:.22rem .55rem .22rem .25rem;gap:.4rem;background:rgba(255,255,255,.92);color:#1a1a1a;border:1px solid rgba(0,0,0,.06)}
+.tag-brand.has-logo img{width:18px;height:18px;border-radius:3px;object-fit:contain;background:#fff;padding:1px}
 
 /* Product grid */
 .pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.1rem}
@@ -259,6 +275,9 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   .pgrid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:740px){
+  .brand-strip{padding:1.5rem 0 1.7rem}
+  .brand-strip-grid{gap:.7rem}
+  .brand-tile{width:110px;height:58px;padding:.5rem .7rem}
   .topbar-left{font-size:.72rem;gap:.8rem}
   .topbar-left .tb-item:nth-child(n+3){display:none}
   .topbar-right{display:none}
@@ -466,6 +485,17 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   </div>
 </section>
 
+<!-- ════════ BRAND STRIP (logos) ════════ -->
+<section class="brand-strip" id="brand-strip" style="display:none">
+  <div class="W">
+    <div class="brand-strip-head">
+      <span class="cat-eyebrow">Marcas oficiales</span>
+      <h3>Distribuidor autorizado</h3>
+    </div>
+    <div class="brand-strip-grid" id="brand-strip-grid"><!-- dinámico --></div>
+  </div>
+</section>
+
 <!-- ════════ CATALOG ════════ -->
 <section class="cat-sec" id="catalogo">
   <div class="W">
@@ -587,8 +617,27 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   }
 
   function normalizeBrand(b, i) {
-    if (typeof b === 'string') return { id: 'br-' + i, name: b, color: '#7C829A' };
-    return { id: b.id || ('br-' + i), name: b.name || 'Marca', color: b.color || '#7C829A' };
+    if (typeof b === 'string') return { id: 'br-' + i, name: b, color: '#7C829A', image: '' };
+    return {
+      id: b.id || ('br-' + i),
+      name: b.name || 'Marca',
+      color: b.color || '#7C829A',
+      image: b.image || b.logo || b.img || ''
+    };
+  }
+
+  function brandByName(name) {
+    if (!name) return null;
+    var lc = String(name).toLowerCase().trim();
+    // Match case-insensitive priorizando la entrada con logo (cubre "HIKVISION" vs "Hikvision" duplicados)
+    var fallback = null;
+    for (var i = 0; i < state.brands.length; i++) {
+      if (String(state.brands[i].name).toLowerCase().trim() === lc) {
+        if (state.brands[i].image) return state.brands[i];
+        fallback = fallback || state.brands[i];
+      }
+    }
+    return fallback;
   }
 
   function getCategoriesData() {
@@ -677,21 +726,40 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
     all.addEventListener('click', function () { state.fBrand = 'todos'; renderBrands(); renderGrid(); });
     box.appendChild(all);
     // Brand pills (solo las que tienen al menos 1 producto)
+    // Comparamos case-insensitive para tolerar entradas duplicadas tipo "HIKVISION" y "Hikvision".
     var brandsWithProducts = {};
-    state.products.forEach(function (p) { brandsWithProducts[p.brand] = true; });
+    state.products.forEach(function (p) {
+      brandsWithProducts[String(p.brand || '').toLowerCase().trim()] = true;
+    });
+    // Deduplicar marcas que tienen el mismo nombre en distinto case, priorizando la que tenga logo
+    var seenKeys = {};
+    var brandsToShow = [];
     state.brands.forEach(function (b) {
-      if (!brandsWithProducts[b.name]) return;
+      var k = String(b.name).toLowerCase().trim();
+      if (!brandsWithProducts[k]) return;
+      var prev = seenKeys[k];
+      if (prev == null) { seenKeys[k] = brandsToShow.length; brandsToShow.push(b); }
+      else if (!brandsToShow[prev].image && b.image) brandsToShow[prev] = b; // reemplaza si la nueva tiene logo
+    });
+    var fBrandLc = String(state.fBrand || '').toLowerCase().trim();
+    brandsToShow.forEach(function (b) {
       var pill = document.createElement('button');
-      pill.className = 'bpill' + (state.fBrand === b.name ? ' active' : '');
+      pill.className = 'bpill' + (fBrandLc === String(b.name).toLowerCase().trim() ? ' active' : '');
       pill.style.setProperty('--bp-c', b.color || '#E01233');
-      pill.innerHTML = '<span class="dot"></span>' + esc(b.name);
+      // Si la marca tiene logo lo mostramos; si no, el clasico dot de color
+      var prefix = b.image
+        ? '<img class="bpill-logo" src="' + esc(b.image) + '" alt="' + esc(b.name) + '" onerror="this.outerHTML=&quot;<span class=\\&quot;dot\\&quot;></span>&quot;"/>'
+        : '<span class="dot"></span>';
+      pill.innerHTML = prefix + esc(b.name);
       pill.addEventListener('click', function () { state.fBrand = b.name; renderBrands(); renderGrid(); });
       box.appendChild(pill);
     });
+    // Renderizar strip de logos prominente con todas las marcas que tienen logo
+    renderBrandStrip(brandsWithProducts, brandsToShow);
     // Footer brands
     var ftb = document.getElementById('ft-brands');
     if (ftb) {
-      ftb.innerHTML = state.brands.filter(function (b) { return brandsWithProducts[b.name]; }).slice(0, 7).map(function (b) {
+      ftb.innerHTML = brandsToShow.slice(0, 7).map(function (b) {
         return '<li><a href="#catalogo" data-fb="' + esc(b.name) + '">' + esc(b.name) + '</a></li>';
       }).join('');
       ftb.querySelectorAll('a[data-fb]').forEach(function (a) {
@@ -703,6 +771,29 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
         });
       });
     }
+  }
+
+  // ── Render: strip prominente de marcas (con logos) ──
+  function renderBrandStrip(brandsWithProducts, brandsToShow) {
+    var sec = document.getElementById('brand-strip');
+    var grid = document.getElementById('brand-strip-grid');
+    if (!sec || !grid) return;
+    // brandsToShow ya viene deduplicado y filtrado por marcas con productos
+    var withLogo = (brandsToShow || []).filter(function (b) { return !!b.image; });
+    if (!withLogo.length) { sec.style.display = 'none'; return; }
+    sec.style.display = '';
+    grid.innerHTML = withLogo.map(function (b) {
+      return '<button class="brand-tile" data-b="' + esc(b.name) + '" title="Ver productos ' + esc(b.name) + '">' +
+        '<img src="' + esc(b.image) + '" alt="' + esc(b.name) + '" loading="lazy" onerror="this.parentNode.innerHTML=&quot;<span class=\\&quot;brand-tile-fallback\\&quot;>' + esc(b.name) + '</span>&quot;"/>' +
+        '</button>';
+    }).join('');
+    grid.querySelectorAll('[data-b]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        state.fBrand = btn.getAttribute('data-b');
+        renderBrands(); renderGrid();
+        document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
   }
 
   // ── Render: grid de productos ──
@@ -731,10 +822,14 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
     var img;
     if (p.image) img = '<img src="' + esc(p.image) + '" alt="' + esc(p.description) + '" loading="lazy" onerror="this.parentNode.classList.add(\'empty\');this.remove()"/>';
     else img = '<div style="font-size:2.5rem;color:var(--t4);font-weight:800">' + esc(p.code.slice(0, 2)) + '</div>';
+    var br = brandByName(p.brand);
+    var brandBadge = br && br.image
+      ? '<span class="tag-brand has-logo" style="--tb-c:' + (br.color || '#E01233') + '"><img src="' + esc(br.image) + '" alt="' + esc(p.brand) + '" onerror="this.outerHTML=&quot;<span class=\\&quot;dot\\&quot;></span>&quot;"/>' + esc(p.brand) + '</span>'
+      : '<span class="tag-brand" style="--tb-c:' + brandColor(p.brand) + '"><span class="dot"></span>' + esc(p.brand) + '</span>';
     return '<article class="pcard" data-id="' + esc(p.id) + '">' +
       '<div class="pcard-img' + (p.image ? '' : ' empty') + '">' +
         '<div class="pcard-tags">' +
-          '<span class="tag-brand" style="--tb-c:' + brandColor(p.brand) + '"><span class="dot"></span>' + esc(p.brand) + '</span>' +
+          brandBadge +
           stockTag(p.stock) +
         '</div>' +
         img +
@@ -756,7 +851,10 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
 
   function filterAndSort() {
     var out = state.products.slice();
-    if (state.fBrand && state.fBrand !== 'todos') out = out.filter(function (p) { return p.brand === state.fBrand; });
+    if (state.fBrand && state.fBrand !== 'todos') {
+      var fb = String(state.fBrand).toLowerCase().trim();
+      out = out.filter(function (p) { return String(p.brand || '').toLowerCase().trim() === fb; });
+    }
     if (state.fCat) out = out.filter(function (p) { return p.category === state.fCat; });
     if (state.q) {
       var q = state.q.toLowerCase();
