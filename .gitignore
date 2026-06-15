@@ -33,3 +33,6 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# Build output (Cloudflare Pages — se genera en cada deploy)
+dist/

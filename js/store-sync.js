@@ -30,18 +30,29 @@
   var isLogin = /login\.html$/i.test(path);
 
   // ── Base de la API ──
-  // En produccion (dominio real) la pagina y la API se sirven desde el MISMO
-  // origen, asi que API='' (rutas relativas). Para desarrollo:
-  //   - file:// (HTML abierto como archivo) -> apunta al server local :3000
-  //   - localhost por otro puerto (p.ej. Live Server :5500) -> apunta al :3000
+  // Hosting hibrido: frontend en Cloudflare Pages, backend en Render.
+  //   - file:// (HTML abierto como archivo) -> server local :3000
+  //   - localhost en cualquier puerto -> mismo origen (asume que server.js
+  //     sirve este puerto). Si usas Live Server u otro y necesitas apuntar
+  //     a un backend diferente, define window.HC_API_BASE antes de este script.
+  //   - dominio del backend (onrender.com) -> mismo origen ('')
+  //   - cualquier otro dominio (Cloudflare Pages, dominio propio) -> backend Render
+  // Para forzar una URL: window.HC_API_BASE = 'https://mi-backend...' (override total).
+  // Para cambiar solo el backend de produccion: window.HC_BACKEND_URL = '...'.
+  var BACKEND_URL = (window.HC_BACKEND_URL || 'https://hypercix.onrender.com').replace(/\/+$/, '');
   var API_PORT = '3000';
   var host = location.hostname;
   var isLocal = host === 'localhost' || host === '127.0.0.1' || host === '';
+  var isBackendHost = /(^|\.)onrender\.com$/i.test(host);
   var API = '';
-  if (location.protocol === 'file:') {
+  if (window.HC_API_BASE) {
+    API = String(window.HC_API_BASE).replace(/\/+$/, '');
+  } else if (location.protocol === 'file:') {
     API = 'http://localhost:' + API_PORT;
-  } else if (isLocal && location.port && location.port !== API_PORT) {
-    API = location.protocol + '//' + host + ':' + API_PORT;
+  } else if (isLocal) {
+    API = '';
+  } else if (!isBackendHost) {
+    API = BACKEND_URL;
   }
   window.HC_API = API;
 

@@ -69,8 +69,21 @@
   function total() { return cart.reduce(function (s, i) { return s + i.qty * i.price; }, 0); }
   function count() { return cart.reduce(function (s, i) { return s + i.qty; }, 0); }
 
-  function open() { ov.classList.add('open'); panel.classList.add('open'); render(); }
+  function open() { cart = load(); ov.classList.add('open'); panel.classList.add('open'); render(); updateBadge(); }
   function close() { ov.classList.remove('open'); panel.classList.remove('open'); }
+
+  // Refrescar carrito si otra parte del codigo (nuevo index.js) o pestana lo modifica
+  window.addEventListener('storage', function (e) {
+    if (e.key === CART_KEY) { cart = load(); updateBadge(); if (panel.classList.contains('open')) render(); }
+  });
+  // Polling ligero para cambios dentro de la misma pagina (storage event no dispara para misma ventana)
+  setInterval(function () {
+    var fresh = load();
+    if (JSON.stringify(fresh) !== JSON.stringify(cart)) {
+      cart = fresh; updateBadge();
+      if (panel.classList.contains('open')) render();
+    }
+  }, 800);
 
   function updateBadge() {
     var n = count();

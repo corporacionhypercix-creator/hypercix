@@ -1,0 +1,21 @@
+/css/*
+  Cache-Control: public, max-age=86400
+
+/js/*
+  Cache-Control: public, max-age=3600
+
+/img/*
+  Cache-Control: public, max-age=604800
+
+/icons/*
+  Cache-Control: public, max-age=604800
+
+/manifest.json
+  Cache-Control: public, max-age=3600
+
+/*.html
+  Cache-Control: public, max-age=300
+
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
