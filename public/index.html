@@ -1883,19 +1883,40 @@ renderPills();renderBrandCards();renderSubnavBrands();renderHeaderDropdown();ren
 // Deep-link: /public/index.html#catalogo abre directamente esa sección (usado por /tienda)
 (function(){const h=(location.hash||"").replace("#","").trim();if(["inicio","catalogo","marcas","soluciones","servicios","nosotros","contacto","checkout"].includes(h))goTab(h);})();
 
+function syncFromServer(cb){
+  var x=new XMLHttpRequest();
+  x.open('GET',(window.HC_API||'')+'/api/store',true);
+  x.setRequestHeader('ngrok-skip-browser-warning','true');
+  x.onload=function(){
+    if(x.status===200){
+      try{
+        var all=JSON.parse(x.responseText);
+        var changed=0;
+        if(all['hypercix-admin-products']){localStorage.setItem(STORE_PRODUCTS_KEY,JSON.stringify(all['hypercix-admin-products']));changed=1;}
+        if(all['hypercix-admin-brands']){localStorage.setItem(ADMIN_BRANDS_KEY,JSON.stringify(all['hypercix-admin-brands']));changed=1;}
+        if(changed&&cb)cb();
+      }catch(e){}
+    }
+  };
+  x.send();
+}
 let lastProductsRaw=localStorage.getItem(STORE_PRODUCTS_KEY);
 let lastBrandsRaw=localStorage.getItem(ADMIN_BRANDS_KEY);
+function reRenderFromSync(){
+  loadProducts();loadBrandData();populateCategoryFilter();renderPills();renderBrandCards();renderSubnavBrands();renderHeaderDropdown();renderFooterDynamic();
+  renderProds("featured","featGrid");
+  if(document.getElementById("pane-catalogo").classList.contains("on"))applyFilters();
+  else renderProds(curBrand,"prodGrid");
+}
 setInterval(()=>{
   const curP=localStorage.getItem(STORE_PRODUCTS_KEY);
   const curB=localStorage.getItem(ADMIN_BRANDS_KEY);
   if(curP!==lastProductsRaw||curB!==lastBrandsRaw){
     lastProductsRaw=curP;lastBrandsRaw=curB;
-    loadProducts();loadBrandData();populateCategoryFilter();renderPills();renderBrandCards();renderSubnavBrands();renderHeaderDropdown();renderFooterDynamic();
-    renderProds("featured","featGrid");
-    if(document.getElementById("pane-catalogo").classList.contains("on"))applyFilters();
-    else renderProds(curBrand,"prodGrid");
+    reRenderFromSync();
   }
 },4000);
+setInterval(function(){syncFromServer(reRenderFromSync);},15000);
 </script>
 </div><!-- /sim-wrap -->
 </body>
