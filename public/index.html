@@ -8,6 +8,7 @@
 <meta name="keywords" content="camaras de seguridad Chiclayo, CCTV Chiclayo, Hikvision Lambayeque, Dahua Peru, instalacion camaras, cableado estructurado, redes Ubiquiti, seguridad electronica Chiclayo, HYPERCIX"/>
 <meta name="author" content="CORPORACIÓN HYPERCIX S.A.C."/>
 <meta name="robots" content="index,follow"/>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 <meta name="theme-color" content="#C62828"/>
 <meta name="color-scheme" content="dark"/>
 <link rel="canonical" href="https://hypercix.onrender.com/"/>
@@ -808,6 +809,7 @@ html.sim-active .dev-sim{display:flex;top:auto;bottom:1.2rem;left:50%;transform:
 }
 
 /* Anti-overflow global por seguridad: el glow del hero no debe causar scroll horizontal */
+#tsparticles{position:fixed;inset:0;z-index:0;pointer-events:none}#sim-wrap{position:relative;z-index:1}
 .hero,.sec,main,body{overflow-x:clip}
 
 /* ════════════ REALCE PREMIUM (capa de mejora visual) ════════════ */
@@ -858,6 +860,7 @@ a,button,.pcard,.sc,.pill,.tab,.blcard,.solcard{transition:all .25s ease}
 </style>
 </head>
 <body>
+<div id="tsparticles"></div>
 <div class="dev-sim" id="devSim">
   <button class="dev-sim-toggle" id="simBtn" onclick="toggleSim()" title="Vista previa móvil" aria-label="Simular vista móvil">
     <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
@@ -1347,6 +1350,25 @@ a,button,.pcard,.sc,.pill,.tab,.blcard,.solcard{transition:all .25s ease}
 </footer>
 
 <script>
+tsParticles.load("tsparticles",{
+  background:{color:"transparent"},
+  fpsLimit:60,
+  particles:{
+    number:{value:40,density:{enable:true}},
+    color:{value:"#C62828"},
+    shape:{type:"circle"},
+    opacity:{value:0.12,random:true,animation:{enable:true,speed:0.5,minimumValue:0.04}},
+    size:{value:3,random:{enable:true,minimumValue:0.5},animation:{enable:true,speed:1,minimumValue:0.5}},
+    links:{enable:true,distance:140,color:"#C62828",opacity:0.06,width:0.8},
+    move:{enable:true,speed:0.6,direction:"none",random:false,straight:false,outModes:"bounce",attract:{enable:false}},
+    twinkle:{particles:{enable:true,opacity:0.04}}
+  },
+  interactivity:{
+    events:{onHover:{enable:true,mode:"grab"},onClick:{enable:true,mode:"push"}},
+    modes:{grab:{distance:160,links:{opacity:0.1}},push:{quantity:2}}
+  },
+  detectRetina:true
+});
 const STORE_PRODUCTS_KEY="hypercix-admin-products";
 const ADMIN_BRANDS_KEY="hypercix-admin-brands";
 function esc(v){return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
