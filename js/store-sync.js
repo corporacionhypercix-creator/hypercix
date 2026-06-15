@@ -90,49 +90,81 @@
     return;
   }
 
-  // ── 2) Hidratar localStorage desde el servidor (sincrono) ──
-  // Se hace antes de parchear setItem para no reenviar lo recien leido.
+  // ── 2) Hidratar localStorage desde el servidor (asincrono) ──
+  // No bloquea la UI; si el servidor esta frio (cold start Render ~30s) la
+  // pagina se renderiza con cache local y se actualiza cuando llegue la
+  // respuesta o en el siguiente ciclo de sync periodico (15s).
   if (!isLogin) {
     try {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', API + '/api/store', false); // sincrono a proposito (orden garantizado)
+      xhr.open('GET', API + '/api/store', true); // asincrono
       xhr.setRequestHeader('ngrok-skip-browser-warning', 'true');
+      xhr.timeout = 10000; // 10s max
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          try {
+            var all = JSON.parse(xhr.responseText);
+            Object.keys(SYNC_KEYS).forEach(function (k) {
+              if (all[k] !== null && all[k] !== undefined) {
+                localStorage.setItem(k, JSON.stringify(all[k]));
+              }
+            });
+          } catch (e) {}
+        }
+      };
+      xhr.ontimeout = function () {
+        if (window.console) console.warn('[store-sync] timeout, usando cache local');
+      };
+      xhr.onerror = function () {
+        if (window.console) console.warn('[store-sync] error de red, usando cache local');
+      };
       xhr.send(null);
-      if (xhr.status === 200) {
-        var all = JSON.parse(xhr.responseText);
-        Object.keys(SYNC_KEYS).forEach(function (k) {
-          if (all[k] !== null && all[k] !== undefined) {
-            localStorage.setItem(k, JSON.stringify(all[k]));
-          }
-        });
-      }
     } catch (e) {
-      // Servidor no disponible: se usa el cache local existente.
       if (window.console) console.warn('[store-sync] offline, usando cache local');
     }
   }
 
   // ── 3) Parchear setItem para replicar cambios admin al servidor ──
+  // Cola de reintentos para PUTs que fallan (cold start, red caida, etc.)
+  var putQueue = {}; // { key: value }
   var rawSetItem = localStorage.setItem.bind(localStorage);
   localStorage.setItem = function (key, value) {
     rawSetItem(key, value);
     if (SYNC_KEYS[key] && getToken()) {
-      try {
+      var doPut = function () {
         fetch(API + '/api/store/' + encodeURIComponent(key), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'X-Auth-Token': getToken(), 'ngrok-skip-browser-warning': 'true' },
-          body: value // los modulos ya guardan JSON valido
+          body: value
         }).then(function (r) {
           if (r.status === 401) {
-            // Sesion expirada o servidor reiniciado: limpiar y volver al login.
             localStorage.removeItem(TOKEN_KEY);
             localStorage.removeItem(USER_KEY);
             if (isAdmin && !isLogin) location.replace('login.html');
+          } else if (r.ok) {
+            delete putQueue[key]; // exito, quitar de cola
+          } else {
+            putQueue[key] = value; // fallo, encolar para reintento
           }
-        }).catch(function () {});
-      } catch (e) {}
+        }).catch(function () { putQueue[key] = value; });
+      };
+      doPut();
     }
   };
+  // Reintentar PUTs fallidos cada 30s
+  if (isAdmin && getToken()) {
+    setInterval(function () {
+      Object.keys(putQueue).forEach(function (k) {
+        fetch(API + '/api/store/' + encodeURIComponent(k), {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'X-Auth-Token': getToken(), 'ngrok-skip-browser-warning': 'true' },
+          body: putQueue[k]
+        }).then(function (r) {
+          if (r.ok) delete putQueue[k];
+        }).catch(function () {});
+      });
+    }, 30000);
+  }
 
   // ── 4) Interceptar enlaces "Salir" para cerrar sesion limpiamente ──
   document.addEventListener('DOMContentLoaded', function () {
