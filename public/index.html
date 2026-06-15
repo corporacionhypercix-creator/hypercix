@@ -809,7 +809,7 @@ html.sim-active .dev-sim{display:flex;top:auto;bottom:1.2rem;left:50%;transform:
 }
 
 /* Anti-overflow global por seguridad: el glow del hero no debe causar scroll horizontal */
-#tsparticles{position:fixed;inset:0;z-index:0;pointer-events:none}#sim-wrap{position:relative;z-index:1}
+#tsparticles{position:fixed;inset:0;z-index:9999;pointer-events:none}
 .hero,.sec,main,body{overflow-x:clip}
 
 /* ════════════ REALCE PREMIUM (capa de mejora visual) ════════════ */
@@ -1352,20 +1352,19 @@ a,button,.pcard,.sc,.pill,.tab,.blcard,.solcard{transition:all .25s ease}
 <script>
 tsParticles.load("tsparticles",{
   background:{color:"transparent"},
-  fpsLimit:60,
+  fpsLimit:30,
   particles:{
-    number:{value:40,density:{enable:true}},
+    number:{value:25,density:{enable:true}},
     color:{value:"#C62828"},
     shape:{type:"circle"},
-    opacity:{value:0.12,random:true,animation:{enable:true,speed:0.5,minimumValue:0.04}},
-    size:{value:3,random:{enable:true,minimumValue:0.5},animation:{enable:true,speed:1,minimumValue:0.5}},
-    links:{enable:true,distance:140,color:"#C62828",opacity:0.06,width:0.8},
-    move:{enable:true,speed:0.6,direction:"none",random:false,straight:false,outModes:"bounce",attract:{enable:false}},
-    twinkle:{particles:{enable:true,opacity:0.04}}
+    opacity:{value:0.06,random:true,animation:{enable:true,speed:0.3,minimumValue:0.02}},
+    size:{value:2.5,random:{enable:true,minimumValue:0.5}},
+    links:{enable:true,distance:160,color:"#C62828",opacity:0.03,width:0.6},
+    move:{enable:true,speed:0.4,direction:"none",random:false,straight:false,outModes:"bounce"}
   },
   interactivity:{
     events:{onHover:{enable:true,mode:"grab"},onClick:{enable:true,mode:"push"}},
-    modes:{grab:{distance:160,links:{opacity:0.1}},push:{quantity:2}}
+    modes:{grab:{distance:140,links:{opacity:0.05}},push:{quantity:1}}
   },
   detectRetina:true
 });
