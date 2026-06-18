@@ -22,5 +22,5 @@ services:
         sync: false
     disk:
       name: hypercix-data
-      mountPath: /opt/render/project/src/database
+      mountPath: /app/database
       sizeGB: 1
