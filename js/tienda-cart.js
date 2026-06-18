@@ -6,7 +6,7 @@
   'use strict';
   var CART_KEY = 'hypercix-cart';
 
-  function esc(v) { return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function esc(v) { return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
   function money(v) { return 'S/ ' + Number(v || 0).toFixed(2); }
   function load() { try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch (e) { return []; } }
   function save(c) { localStorage.setItem(CART_KEY, JSON.stringify(c)); }
