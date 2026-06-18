@@ -2,6 +2,7 @@
   const SETTINGS_KEY = 'hypercix-admin-settings';
 
   const defaultSettings = {
+    logo: '',
     storeName: 'HYPERCIX',
     currency: 'S/',
     currencyCode: 'PEN',
@@ -34,6 +35,7 @@
   }
 
   const form = document.getElementById('settings-form');
+  const logoInput = document.getElementById('sett-logo');
   const storeNameInput = document.getElementById('sett-store-name');
   const currencyInput = document.getElementById('sett-currency');
   const currencyCodeInput = document.getElementById('sett-currency-code');
@@ -42,9 +44,26 @@
   const emailInput = document.getElementById('sett-email');
   const phoneInput = document.getElementById('sett-phone');
   const addressInput = document.getElementById('sett-address');
+  const logoPreview = document.getElementById('logo-preview');
+
+  function updateLogoPreview(url) {
+    const existing = logoPreview.querySelector('img');
+    if (existing) existing.remove();
+    const label = logoPreview.querySelector('span');
+    if (url) {
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'logo preview';
+      img.style.cssText = 'max-height:36px;border-radius:4px;object-fit:contain';
+      img.onerror = () => { img.style.display = 'none'; };
+      label.after(img);
+    }
+  }
 
   function loadSettings() {
     const s = getSettings();
+    logoInput.value = s.logo || '';
+    updateLogoPreview(s.logo);
     storeNameInput.value = s.storeName;
     currencyInput.value = s.currency;
     currencyCodeInput.value = s.currencyCode;
@@ -55,9 +74,12 @@
     addressInput.value = s.address;
   }
 
+  logoInput.addEventListener('input', () => updateLogoPreview(logoInput.value.trim()));
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const settings = {
+      logo: logoInput.value.trim(),
       storeName: storeNameInput.value.trim(),
       currency: currencyInput.value.trim(),
       currencyCode: currencyCodeInput.value.trim().toUpperCase(),

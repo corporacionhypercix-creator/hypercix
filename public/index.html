@@ -1107,6 +1107,32 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
 
 <!-- Carrito flotante (lateral con form de cotización) -->
 <script src="/js/tienda-cart.js?v=3"></script>
+<script>
+(function() {
+  var api = window.HC_API || '';
+  function setLogo(url) {
+    if (!url) return;
+    var hdr = document.querySelector('.hdr .logo');
+    var ftr = document.querySelector('.ft-logo');
+    var img = '<img src="' + url.replace(/"/g,'&quot;') + '" alt="HYPERCIX" style="height:32px;vertical-align:middle">';
+    if (hdr) hdr.innerHTML = img;
+    if (ftr) ftr.innerHTML = img;
+  }
+  try {
+    var s = JSON.parse(localStorage.getItem('hypercix-admin-settings'));
+    if (s && s.logo) setLogo(s.logo);
+  } catch(e) {}
+  if (api) {
+    fetch(api + '/api/store', { headers: { 'ngrok-skip-browser-warning': 'true' } })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d && d['hypercix-admin-settings'] && d['hypercix-admin-settings'].logo) {
+          setLogo(d['hypercix-admin-settings'].logo);
+        }
+      }).catch(function(){});
+  }
+})();
+</script>
 
 </body>
 </html>
