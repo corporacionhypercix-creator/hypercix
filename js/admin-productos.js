@@ -84,16 +84,8 @@
     return readJSON(STORAGE_KEY, []).map(normalizeProduct);
   }
 
-  function showToast(msg, type) {
-    var t = document.createElement('div');
-    t.textContent = msg;
-    t.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:99999;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;color:#fff;background:' + (type === 'err' ? '#c62828' : '#16a34a') + ';box-shadow:0 8px 30px rgba(0,0,0,.4);transition:opacity .3s;opacity:1';
-    document.body.appendChild(t);
-    setTimeout(function () { t.style.opacity = '0'; setTimeout(function () { t.remove(); }, 300); }, 2500);
-  }
   function saveProducts(products) {
     writeJSON(STORAGE_KEY, products.map(normalizeProduct));
-    showToast('Producto guardado');
   }
 
   function extractNames(items) {
@@ -316,8 +308,8 @@
         details: field('detalles', 'descripcion larga', 'descripci\u00f3n larga', 'details') || '',
         category: field('categoria', 'categor\u00eda', 'category') || row[2] || 'General',
         brand: field('marca', 'brand') || row[3] || 'Sin marca',
-        price: Math.max(0, Number(field('precio', 'price') || row[4] || 0) || 0),
-        stock: Math.max(0, Number(field('stock') || row[5] || 0) || 0),
+        price: Number(field('precio', 'price') || row[4] || 0),
+        stock: Number(field('stock') || row[5] || 0),
         taxType: field('igv', 'tipo igv', 'tax') || 'gravado',
         image: field('imagen', 'image', 'url') || '',
         color: colorFromCode(code),
@@ -342,8 +334,8 @@
       details: detailsInput.value.trim(),
       category: categorySelect.value,
       brand: brandSelect.value,
-      price: Math.max(0, Number(priceInput.value) || 0),
-      stock: Math.max(0, Number(stockInput.value) || 0),
+      price: Number(priceInput.value),
+      stock: Number(stockInput.value),
       taxType: taxSelect.value,
       images: productImages.slice(),
       image: productImages[0] || '',
@@ -402,7 +394,7 @@
       productImages.push(...results);
       renderGallery();
       imageFileInput.value = '';
-    }).catch(function () { imageFileInput.value = ''; });
+    });
   });
 
   galleryEl.addEventListener('click', (event) => {

@@ -602,8 +602,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
 
   // ── Datos del admin ──
   function safe(k, fb) { try { return JSON.parse(localStorage.getItem(k) || 'null') ?? fb; } catch (e) { return fb; } }
-  function esc(v) { return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-  function onclickEsc(v) { return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,"\\'").replace(/\\/g,'\\\\'); }
+  function esc(v) { return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function money(v) { return 'S/ ' + Number(v || 0).toFixed(2); }
   function slug(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
 
@@ -634,7 +633,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   function normalizeProduct(p, i) {
     var imgs = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
     if (!imgs.length && p.image) imgs.push(p.image);
-    return Object.assign({}, p, {
+    return {
       id: p.id || ('p-' + i),
       code: p.code || p.sku || ('PROD-' + (i + 1)),
       description: p.description || p.name || 'Producto',
@@ -644,9 +643,8 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
       price: Number(p.price || 0),
       stock: Number(p.stock || 0),
       image: imgs[0] || '',
-      color: p.color || '#1E2540',
-      images: imgs
-    });
+      color: p.color || '#1E2540'
+    };
   }
 
   function normalizeBrand(b, i) {
@@ -847,8 +845,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   }
 
   function brandColor(name) {
-    var n = (name || '').toLowerCase();
-    for (var i = 0; i < state.brands.length; i++) if ((state.brands[i].name || '').toLowerCase() === n) return state.brands[i].color || '#E01233';
+    for (var i = 0; i < state.brands.length; i++) if (state.brands[i].name === name) return state.brands[i].color || '#E01233';
     return '#E01233';
   }
 
@@ -862,7 +859,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
       : '<span class="tag-brand" style="--tb-c:' + brandColor(p.brand) + '"><span class="dot"></span>' + esc(p.brand) + '</span>';
     var eyeIcon = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
     var overlay = '<div class="pcard-overlay">' +
-      '<button class="pcard-view-btn" onclick="event.stopPropagation();openModal(\'' + onclickEsc(p.id) + '\')" title="Ver detalles">' + eyeIcon + '</button>' +
+      '<button class="pcard-view-btn" onclick="event.stopPropagation();openModal(\'' + esc(p.id) + '\')" title="Ver detalles">' + eyeIcon + '</button>' +
       '</div>';
     return '<article class="pcard" data-id="' + esc(p.id) + '">' +
       '<div class="pcard-img' + (p.image ? '' : ' empty') + '">' +
@@ -879,7 +876,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
         ratingStars(p.code) +
         '<div class="pcard-foot">' +
           '<div class="pcard-price">' + money(p.price) + '</div>' +
-          '<button class="pcard-btn" onclick="openModal(\'' + onclickEsc(p.id) + '\')">' +
+          '<button class="pcard-btn" onclick="openModal(\'' + esc(p.id) + '\')">' +
             eyeIcon + ' Ver ficha' +
           '</button>' +
         '</div>' +
@@ -936,8 +933,6 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   function loadCart() { try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch (e) { return []; } }
   function saveCart(c) { localStorage.setItem(CART_KEY, JSON.stringify(c)); }
   function addToCart(p) {
-    if (typeof p === 'string') p = state.products.find(function (x) { return x.id === p; });
-    if (!p) return;
     var c = loadCart();
     var ex = c.find(function (it) { return it.id === p.id; });
     if (ex) ex.qty = (ex.qty || 1) + 1;
@@ -966,43 +961,32 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
     var imgs = [];
     if (p.image) imgs.push(p.image);
     if (p.images && p.images.length) p.images.forEach(function (i) { if (i && imgs.indexOf(i) === -1) imgs.push(i); });
-
-    var overlay = document.getElementById('modalOverlay');
-    var gallery = document.getElementById('modalGallery');
-    var imgWrap = document.getElementById('modalImg');
-    var thumbs = document.getElementById('modalThumbs');
-    var info = document.getElementById('modalInfo');
-
-    imgWrap.innerHTML = imgs.length
+    document.getElementById('modalImg').innerHTML = imgs.length
       ? '<img src="' + esc(imgs[0]) + '" alt="' + esc(p.description) + '" id="modalMainImg"/>'
-      : '<div style="font-size:3rem;font-weight:800">' + esc(p.code.slice(0, 2)) + '</div>';
-    thumbs.innerHTML = imgs.length > 1
-      ? imgs.map(function (s, i) {
+      : '<div style="color:var(--t4);font-size:3rem;font-weight:800">' + esc(p.code.slice(0, 2)) + '</div>';
+    var thumbs = imgs.length > 1
+      ? '<div class="modal-thumbs">' + imgs.map(function (s, i) {
           return '<button type="button" class="modal-thumb' + (i === 0 ? ' active' : '') + '" onclick="window.modalSetImage(\'' + esc(s) + '\',this)"><img src="' + esc(s) + '" alt=""/></button>';
-        }).join('')
+        }).join('') + '</div>'
       : '';
-    thumbs.style.display = imgs.length > 1 ? '' : 'none';
-
     var stkCls = p.stock <= 0 ? 'out' : (p.stock <= 5 ? 'low' : 'ok');
     var stkTxt = p.stock <= 0 ? 'AGOTADO' : (p.stock <= 5 ? 'Stock bajo: ' + p.stock + ' uds' : 'Stock: ' + p.stock + ' uds');
-
-    document.getElementById('modalBrand').textContent = esc(p.brand);
-    document.getElementById('modalTitle').textContent = esc(p.description);
-    document.getElementById('modalSku').textContent = 'SKU: ' + esc(p.code) + ' · ' + esc(p.category);
-    document.getElementById('modalPrice').textContent = money(p.price);
-    document.getElementById('modalStock').innerHTML = '<span class="tag-stock ' + stkCls + '">' + stkTxt + '</span>';
-    document.getElementById('modalDesc').textContent = p.details || '';
-    document.getElementById('modalDesc').style.display = p.details ? '' : 'none';
-
-    var footer = document.getElementById('modalFooter');
-    footer.innerHTML =
-      '<button class="btn-primary" onclick="addToCart(\'' + onclickEsc(p.id) + '\');updateCartBadge();closeModal();document.getElementById(\'btn-cart\').click()"' + (p.stock <= 0 ? ' disabled' : '') + '>' +
-        (p.stock <= 0 ? 'Consultar' : 'Cotizar ahora') +
-      '</button>' +
-      '<a href="https://wa.me/51996900982?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20' + esc(p.code) + '" target="_blank" rel="noopener" class="btn-secondary">WhatsApp</a>';
-
-    overlay.classList.add('active');
-    gallery.scrollTop = 0;
+    document.getElementById('modalBody').innerHTML =
+      '<div class="modal-brand">' + esc(p.brand) + '</div>' +
+      '<h2 style="font-size:1.1rem;font-weight:700;color:var(--t1);margin:0;line-height:1.3">' + esc(p.description) + '</h2>' +
+      '<div class="modal-sku">SKU: ' + esc(p.code) + ' · ' + esc(p.category) + '</div>' +
+      '<div class="modal-price">' + money(p.price) + '</div>' +
+      '<div class="modal-stock tag-stock ' + stkCls + '" style="display:inline-flex;padding:.3rem .7rem;border-radius:6px">' + stkTxt + '</div>' +
+      (p.details ? '<div class="modal-desc">' + esc(p.details) + '</div>' : '') +
+      thumbs +
+      '<div style="display:flex;gap:.6rem;margin-top:.5rem">' +
+        '<button class="btn-quote" onclick="addToCart(p);updateCartBadge();closeModal();document.getElementById(\'btn-cart\').click()" style="flex:1;justify-content:center"' + (p.stock <= 0 ? ' disabled' : '') + '>' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' +
+          (p.stock <= 0 ? 'Consultar' : 'Cotizar ahora') +
+        '</button>' +
+        '<a href="https://wa.me/51996900982?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20' + esc(p.code) + '" target="_blank" rel="noopener" class="btn-quote" style="background:var(--wsp);box-shadow:0 4px 14px rgba(37,211,102,.3);justify-content:center"><svg viewBox="0 0 32 32" fill="currentColor" style="width:15px;height:15px"><path d="M16.003.001C7.166.001.001 7.165.001 16.002c0 2.823.738 5.572 2.139 8.003L0 32l8.197-2.142a15.97 15.97 0 0 0 7.806 1.99h.007c8.836 0 16.001-7.165 16.001-16.002 0-4.276-1.665-8.295-4.689-11.319A15.93 15.93 0 0 0 16.003.001z"/></svg>WhatsApp</a>' +
+      '</div>';
+    document.getElementById('modalBg').classList.add('on');
     document.body.style.overflow = 'hidden';
   };
   window.modalSetImage = function (src, btn) {
@@ -1012,7 +996,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
     if (btn) btn.classList.add('active');
   };
   window.closeModal = function () {
-    document.getElementById('modalOverlay').classList.remove('active');
+    document.getElementById('modalBg').classList.remove('on');
     document.body.style.overflow = '';
   };
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
@@ -1074,20 +1058,17 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   else init();
 
   // ── Sync periódico desde el servidor (cada 15s) ──
-  // Con guardia de request en vuelo y pausa cuando la pestaña está oculta.
-  var syncXhr = null;
-  var syncTimer = null;
-  function doSync() {
-    if (syncXhr && syncXhr.readyState !== 0 && syncXhr.readyState !== 4) return;
-    if (document.hidden) return;
+  // Igual que el commit d928294: la página pública se mantiene fresca aunque el
+  // admin agregue/edite productos en otra sesión.
+  setInterval(function () {
     try {
-      syncXhr = new XMLHttpRequest();
-      syncXhr.open('GET', (window.HC_API || '') + '/api/store', true);
-      syncXhr.setRequestHeader('ngrok-skip-browser-warning', 'true');
-      syncXhr.onload = function () {
-        if (syncXhr.status !== 200) return;
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', (window.HC_API || '') + '/api/store', true);
+      xhr.setRequestHeader('ngrok-skip-browser-warning', 'true');
+      xhr.onload = function () {
+        if (xhr.status !== 200) return;
         try {
-          var all = JSON.parse(syncXhr.responseText);
+          var all = JSON.parse(xhr.responseText);
           var changed = false;
           ['hypercix-admin-products', 'hypercix-admin-categories', 'hypercix-admin-categories-data', 'hypercix-admin-brands'].forEach(function (k) {
             if (all[k] !== undefined && all[k] !== null) {
@@ -1099,13 +1080,9 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
           if (changed) { load(); renderCats(); renderBrands(); renderGrid(); }
         } catch (e) {}
       };
-      syncXhr.send(null);
+      xhr.send(null);
     } catch (e) {}
-  }
-  syncTimer = setInterval(doSync, 15000);
-  document.addEventListener('visibilitychange', function () {
-    if (!document.hidden) doSync();
-  });
+  }, 15000);
 
   // Actualizar badge si el cart cambia en otra pestaña
   window.addEventListener('storage', function (e) {
@@ -1115,27 +1092,11 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
 </script>
 
 <!-- Modal de detalle de producto -->
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal-window">
-    <button class="modal-close" onclick="closeModal()">&times;</button>
-    <div class="modal-body">
-      <div class="modal-gallery" id="modalGallery">
-        <div class="modal-image" id="modalImg"></div>
-        <div class="modal-thumbs" id="modalThumbs"></div>
-      </div>
-      <div class="modal-info" id="modalInfo">
-        <div class="modal-brand" id="modalBrand"></div>
-        <h3 class="modal-title" id="modalTitle"></h3>
-        <div class="modal-sku" id="modalSku"></div>
-        <div class="modal-price-block">
-          <div class="modal-price" id="modalPrice"></div>
-          <div class="modal-tax">Incluye IGV</div>
-        </div>
-        <div class="modal-stock" id="modalStock"></div>
-        <div class="modal-description" id="modalDesc"></div>
-        <div class="modal-footer" id="modalFooter"></div>
-      </div>
-    </div>
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="modal-img-wrap" id="modalImg"></div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 

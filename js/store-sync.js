@@ -106,13 +106,7 @@
             var all = JSON.parse(xhr.responseText);
             Object.keys(SYNC_KEYS).forEach(function (k) {
               if (all[k] !== null && all[k] !== undefined) {
-                // Solo hidratar si localStorage esta vacio (primera visita)
-                // para NO sobrescribir datos locales del admin que aun no
-                // se han sincronizado con el servidor (cold start, timeout, etc.)
-                var local = localStorage.getItem(k);
-                if (local === null || local === undefined) {
-                  localStorage.setItem(k, JSON.stringify(all[k]));
-                }
+                localStorage.setItem(k, JSON.stringify(all[k]));
               }
             });
           } catch (e) {}

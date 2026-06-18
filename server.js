@@ -59,13 +59,6 @@ const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 8, skipSuccessfu
 
 // ─── BASE DE DATOS ────────────────────────────────────
 const dbPath = path.join(dataDir, 'hypercix.db');
-console.log('DB path:', dbPath);
-try {
-  const dbStat = fs.statSync(dbPath);
-  console.log('DB file exists:', dbStat.size, 'bytes');
-} catch (e) {
-  console.log('DB file does not exist yet (se creara al iniciar)');
-}
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) return console.error('Error al abrir DB:', err.message);
   console.log('Conectado a SQLite:', dbPath);
@@ -101,49 +94,52 @@ function initDatabase() {
       role TEXT,
       created_at TEXT
     )`);
+    // Sesiones persistentes: sobreviven a reinicios/sleeps del free tier.
     db.run(`CREATE TABLE IF NOT EXISTS sessions (
       token TEXT PRIMARY KEY,
       username TEXT NOT NULL,
       role TEXT,
       created_at INTEGER NOT NULL
-    )`);
-    // Cargar sesiones existentes a memoria
-    db.all('SELECT token, username, role, created_at FROM sessions', (err, rows) => {
-      if (!err && rows) {
-        rows.forEach((r) => sessions.set(r.token, { username: r.username, role: r.role, createdAt: r.created_at }));
-        if (rows.length) console.log('Sesiones cargadas:', rows.length);
-      }
+    )`, () => {
+      // Cargar sesiones existentes a memoria (cache rapida)
+      db.all('SELECT token, username, role, created_at FROM sessions', (err, rows) => {
+        if (!err && rows) {
+          rows.forEach((r) => sessions.set(r.token, { username: r.username, role: r.role, createdAt: r.created_at }));
+          if (rows.length) console.log('Sesiones cargadas:', rows.length);
+        }
+        seedDefaults();
+      });
     });
-    // Usuario admin por defecto (solo si no existe)
-    db.get('SELECT COUNT(*) AS n FROM users', (err, row) => {
-      if (!err && row && row.n === 0) {
-        const hash = bcrypt.hashSync(process.env.ADMIN_PASS || 'admin123', 10);
-        db.run('INSERT INTO users (username, pass, role, created_at) VALUES (?, ?, ?, ?)',
-          [process.env.ADMIN_USER || 'admin', hash, 'admin', new Date().toISOString()]);
-        console.log('✓ Usuario admin creado (admin / admin123)');
-      }
-    });
-    // Datos demo iniciales (solo si la coleccion no existe)
-    db.get('SELECT COUNT(*) AS n FROM collections', (err, row) => {
-      if (!err && row && row.n === 0) {
-        const seed = {
-          'hypercix-admin-categories': ['General', 'Camaras', 'Seguridad', 'Redes', 'Servicios', 'Alarmas', 'Accesorios'],
-          'hypercix-admin-brands': ['Sin marca', 'Hikvision', 'Dahua', 'Ezviz', 'Ubiquiti', 'Generica', 'Servicio'],
-          'hypercix-admin-products': [
-            { id: 'demo-1', code: 'CAM-001', description: 'Camara CCTV domo 2MP', category: 'Camaras', brand: 'Hikvision', price: 180, stock: 12, taxType: 'gravado', image: '', color: '#111827' },
-            { id: 'demo-2', code: 'CAM-002', description: 'Camara IP bullet 4MP', category: 'Camaras', brand: 'Dahua', price: 320, stock: 8, taxType: 'gravado', image: '', color: '#1f2937' },
-            { id: 'demo-3', code: 'DVR-004', description: 'DVR 8 canales HD', category: 'Seguridad', brand: 'Hikvision', price: 620, stock: 5, taxType: 'gravado', image: '', color: '#b40f2e' },
-            { id: 'demo-4', code: 'RED-001', description: 'Cable UTP Cat 6 por metro', category: 'Redes', brand: 'Generica', price: 2.8, stock: 500, taxType: 'gravado', image: '', color: '#2563eb' },
-            { id: 'demo-5', code: 'SRV-001', description: 'Instalacion y configuracion tecnica', category: 'Servicios', brand: 'Servicio', price: 150, stock: 99, taxType: 'gravado', image: '', color: '#10b981' }
-          ]
-        };
-        const now = new Date().toISOString();
-        Object.entries(seed).forEach(([key, value]) => {
-          db.run('INSERT OR IGNORE INTO collections (key, data, updated_at) VALUES (?, ?, ?)',
-            [key, JSON.stringify(value), now]);
-        });
-      }
-    });
+  });
+}
+
+function seedDefaults() {
+  // Usuario admin por defecto
+  db.get('SELECT COUNT(*) AS n FROM users', (err, row) => {
+    if (!err && row.n === 0) {
+      const hash = bcrypt.hashSync(process.env.ADMIN_PASS || 'admin123', 10);
+      db.run('INSERT INTO users (username, pass, role, created_at) VALUES (?, ?, ?, ?)',
+        [process.env.ADMIN_USER || 'admin', hash, 'admin', new Date().toISOString()]);
+      console.log('✓ Usuario admin creado (admin / admin123)');
+    }
+  });
+
+  // Datos demo iniciales (solo si la coleccion no existe)
+  const seed = {
+    'hypercix-admin-categories': ['General', 'Camaras', 'Seguridad', 'Redes', 'Servicios', 'Alarmas', 'Accesorios'],
+    'hypercix-admin-brands': ['Sin marca', 'Hikvision', 'Dahua', 'Ezviz', 'Ubiquiti', 'Generica', 'Servicio'],
+    'hypercix-admin-products': [
+      { id: 'demo-1', code: 'CAM-001', description: 'Camara CCTV domo 2MP', category: 'Camaras', brand: 'Hikvision', price: 180, stock: 12, taxType: 'gravado', image: '', color: '#111827' },
+      { id: 'demo-2', code: 'CAM-002', description: 'Camara IP bullet 4MP', category: 'Camaras', brand: 'Dahua', price: 320, stock: 8, taxType: 'gravado', image: '', color: '#1f2937' },
+      { id: 'demo-3', code: 'DVR-004', description: 'DVR 8 canales HD', category: 'Seguridad', brand: 'Hikvision', price: 620, stock: 5, taxType: 'gravado', image: '', color: '#b40f2e' },
+      { id: 'demo-4', code: 'RED-001', description: 'Cable UTP Cat 6 por metro', category: 'Redes', brand: 'Generica', price: 2.8, stock: 500, taxType: 'gravado', image: '', color: '#2563eb' },
+      { id: 'demo-5', code: 'SRV-001', description: 'Instalacion y configuracion tecnica', category: 'Servicios', brand: 'Servicio', price: 150, stock: 99, taxType: 'gravado', image: '', color: '#10b981' }
+    ]
+  };
+  const now = new Date().toISOString();
+  Object.entries(seed).forEach(([key, value]) => {
+    db.run('INSERT OR IGNORE INTO collections (key, data, updated_at) VALUES (?, ?, ?)',
+      [key, JSON.stringify(value), now]);
   });
 }
 
@@ -300,83 +296,29 @@ app.post('/api/quotes', quoteLimiter, (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  let dbOk = false, dbSize = 0, dbRows = 0;
-  try {
-    const s = fs.statSync(dbPath);
-    dbOk = s.isFile();
-    dbSize = s.size;
-  } catch (e) {}
-  db.get('SELECT COUNT(*) AS n FROM collections', (err, row) => {
-    if (!err && row) dbRows = row.n;
-    res.json({ status: 'ok', service: 'hypercix-web', time: new Date().toISOString(), db: { path: dbPath, exists: dbOk, size: dbSize, rows: dbRows } });
-  });
-});
-
-app.get('/api/debug', (req, res) => {
-  const info = { dataDir, dbPath, cwd: process.cwd(), env: { NODE_ENV: process.env.NODE_ENV, PORT: process.env.PORT } };
-  try {
-    info.dataDirExists = fs.existsSync(dataDir);
-    info.dataDirIsMount = false;
-    try { info.dataDirDevice = fs.statSync(dataDir).dev } catch(e){}
-    const s = fs.statSync(dbPath);
-    info.dbExists = s.isFile();
-    info.dbSize = s.size;
-    info.dbModified = s.mtime;
-  } catch (e) { info.dbError = e.message; }
-  if (info.dbExists) {
-    db.get('SELECT COUNT(*) AS n FROM collections', (err, row) => {
-      info.collectionsCount = (!err && row) ? row.n : 0;
-      db.all('SELECT key, length(data) AS size, updated_at FROM collections ORDER BY updated_at DESC LIMIT 20', (err2, rows2) => {
-        info.collections = (!err2 && rows2) ? rows2 : [];
-        info.sessionsCount = sessions.size;
-        res.json(info);
-      });
-    });
-  } else {
-    res.json(info);
-  }
+  res.json({ status: 'ok', service: 'hypercix-web', time: new Date().toISOString() });
 });
 
 // ─── ARCHIVOS ESTATICOS ───────────────────────────────
-// Servir solo directorios de frontend explicitos (NUNCA la raiz del proyecto).
-// Esto evita que /server.js, /package.json, /node_modules, /.env sean accesibles publicamente.
-app.use('/public', express.static(path.join(ROOT, 'public'), {
-  extensions: ['html'], dotfiles: 'ignore', etag: true, lastModified: true, index: false,
-  setHeaders: staticCacheHeaders
-}));
-app.use('/admin', express.static(path.join(ROOT, 'admin'), {
-  extensions: ['html'], dotfiles: 'ignore', etag: true, lastModified: true, index: false,
-  setHeaders: staticCacheHeaders
-}));
-app.use('/css', express.static(path.join(ROOT, 'css'), {
-  dotfiles: 'ignore', etag: true, lastModified: true,
-  setHeaders: staticCacheHeaders
-}));
-app.use('/js', express.static(path.join(ROOT, 'js'), {
-  dotfiles: 'ignore', etag: true, lastModified: true,
-  setHeaders: staticCacheHeaders
-}));
-app.use('/img', express.static(path.join(ROOT, 'img'), {
-  dotfiles: 'ignore', etag: true, lastModified: true,
-  setHeaders: staticCacheHeaders
-}));
-app.use('/icons', express.static(path.join(ROOT, 'icons'), {
-  dotfiles: 'ignore', etag: true, lastModified: true,
-  setHeaders: staticCacheHeaders
-}));
-// Raiz: solo redirige (nunca sirve archivos)
-app.get('/', (req, res) => res.redirect('/public/index.html#catalogo'));
-
-function staticCacheHeaders(res, filePath) {
-  const ext = path.extname(filePath).toLowerCase();
-  if (ext === '.html' || ext === '.js') {
-    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
-  } else if (['.css', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.woff', '.woff2', '.json'].includes(ext)) {
-    res.setHeader('Cache-Control', 'public, max-age=604800');
+// Estaticos: HTML y JS siempre frescos (max-age=0, must-revalidate),
+// CSS/imagenes con cache de 7 dias (el navegador valida con ETag).
+app.use(express.static(ROOT, {
+  extensions: ['html'],
+  dotfiles: 'ignore',
+  etag: true,
+  lastModified: true,
+  setHeaders: function (res, filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    if (ext === '.html' || ext === '.js') {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else if (['.css', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.woff', '.woff2', '.json'].includes(ext)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800'); // 7 dias
+    }
   }
-}
+}));
 
-// Ruta amigable admin (sin barra al final)
+// Rutas amigables
+app.get('/', (req, res) => res.redirect('/public/index.html#catalogo'));
 app.get('/admin', (req, res) => res.redirect('/admin/dashboard.html'));
 // 404 (sin reflejar la ruta del usuario en el HTML, evita XSS reflejado)
 app.use((req, res) => {
