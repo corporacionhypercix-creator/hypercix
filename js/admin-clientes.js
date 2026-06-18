@@ -18,7 +18,6 @@
   }
 
   function getClients() {
-    if (!localStorage.getItem(CLIENT_KEY)) writeJSON(CLIENT_KEY, defaultClients);
     return readJSON(CLIENT_KEY, []);
   }
 
@@ -132,4 +131,5 @@
 
   resetForm();
   renderClients();
+  window.addEventListener('store-synced', renderClients);
 })();

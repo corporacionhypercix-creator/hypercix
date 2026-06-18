@@ -19,7 +19,6 @@
   }
 
   function getBanners() {
-    if (!localStorage.getItem(BANNER_KEY)) writeJSON(BANNER_KEY, defaultBanners);
     return readJSON(BANNER_KEY, []);
   }
 
@@ -168,4 +167,5 @@
 
   resetForm();
   renderBanners();
+  window.addEventListener('store-synced', renderBanners);
 })();

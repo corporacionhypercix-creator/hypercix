@@ -28,10 +28,6 @@
   }
 
   function getCategories() {
-    if (!localStorage.getItem(CATEGORY_DATA_KEY)) {
-      writeJSON(CATEGORY_DATA_KEY, defaultCategories);
-      syncFlatList();
-    }
     return readJSON(CATEGORY_DATA_KEY, []);
   }
 
@@ -131,4 +127,7 @@
 
   resetForm();
   renderCategories();
+  window.addEventListener('store-synced', function () {
+    renderCategories();
+  });
 })();

@@ -26,7 +26,6 @@
   }
 
   function getSettings() {
-    if (!localStorage.getItem(SETTINGS_KEY)) writeJSON(SETTINGS_KEY, defaultSettings);
     return readJSON(SETTINGS_KEY, defaultSettings);
   }
 
@@ -102,4 +101,5 @@
   });
 
   loadSettings();
+  window.addEventListener('store-synced', loadSettings);
 })();

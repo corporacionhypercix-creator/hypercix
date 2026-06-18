@@ -41,10 +41,7 @@
 
   function getBrands() {
     const raw = readJSON(KEY, null);
-    if (!raw) {
-      writeJSON(KEY, defaultBrands);
-      return defaultBrands.map(normalizeBrand);
-    }
+    if (!raw) return [];
     if (!Array.isArray(raw)) return [];
     return raw.map(normalizeBrand);
   }
@@ -257,4 +254,9 @@
   }
 
   init();
+  window.addEventListener('store-synced', function () {
+    currentBrands = getBrands();
+    renderGrid();
+    applyFilter();
+  });
 })();

@@ -18,7 +18,6 @@
   }
 
   function getQuotes() {
-    if (!localStorage.getItem(QUOTE_KEY)) writeJSON(QUOTE_KEY, defaultQuotes);
     return readJSON(QUOTE_KEY, []);
   }
 
@@ -159,4 +158,5 @@
 
   resetForm();
   renderQuotes();
+  window.addEventListener('store-synced', renderQuotes);
 })();

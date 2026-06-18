@@ -78,9 +78,6 @@
   }
 
   function getProducts() {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      writeJSON(STORAGE_KEY, defaultProducts);
-    }
     return readJSON(STORAGE_KEY, []).map(normalizeProduct);
   }
 
@@ -470,4 +467,9 @@
   refreshOptions();
   resetForm();
   renderProducts();
+  window.addEventListener('store-synced', function () {
+    refreshOptions();
+    resetForm();
+    renderProducts();
+  });
 })();

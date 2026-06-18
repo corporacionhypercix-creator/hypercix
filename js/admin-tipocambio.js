@@ -20,7 +20,6 @@
   }
 
   function getRate() {
-    if (!localStorage.getItem(RATE_KEY)) writeJSON(RATE_KEY, defaultRate);
     return readJSON(RATE_KEY, defaultRate);
   }
 
@@ -84,4 +83,5 @@
   });
 
   renderRate();
+  window.addEventListener('store-synced', renderRate);
 })();

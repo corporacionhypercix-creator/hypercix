@@ -110,6 +110,7 @@
               }
             });
           } catch (e) {}
+          try { window.dispatchEvent(new CustomEvent('store-synced')); } catch (e) {}
         }
       };
       xhr.ontimeout = function () {
