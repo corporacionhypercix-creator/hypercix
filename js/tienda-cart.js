@@ -139,6 +139,7 @@
     var buy = e.target.closest('.btn-buy');
     if (buy && !buy.disabled) {
       e.preventDefault();
+      e.stopPropagation();
       addProduct(buy.dataset.id || buy.dataset.code);
     }
   });

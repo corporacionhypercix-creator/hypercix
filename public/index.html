@@ -882,7 +882,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
         ratingStars(p.code) +
         '<div class="pcard-foot">' +
           '<div class="pcard-price">' + money(p.price) + '</div>' +
-          '<button class="pcard-cotizar" onclick="event.stopPropagation();addProduct(\'' + esc(p.id) + '\')" title="Agregar a cotización">Cotizar +</button>' +
+          '<button class="pcard-cotizar btn-buy" data-id="' + esc(p.id) + '" title="Agregar a cotización">Cotizar +</button>' +
           '<button class="pcard-btn" onclick="openModal(\'' + esc(p.id) + '\')">' +
             eyeIcon + ' Ver ficha' +
           '</button>' +
