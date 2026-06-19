@@ -140,7 +140,13 @@
     if (buy && !buy.disabled) {
       e.preventDefault();
       e.stopPropagation();
-      addProduct(buy.dataset.id || buy.dataset.code);
+      if (typeof window.addToCart === 'function' && window.__storeProducts) {
+        var pid = buy.dataset.id || buy.dataset.code;
+        var p = window.__storeProducts.find(function (x) { return String(x.id) === String(pid) || x.code === pid; });
+        if (p) window.addToCart(p);
+      } else {
+        addProduct(buy.dataset.id || buy.dataset.code);
+      }
     }
   });
 

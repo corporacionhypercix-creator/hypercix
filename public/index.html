@@ -1013,6 +1013,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
     state.products = getProducts();
     state.brands = getBrandsData();
     state.categories = getCategoriesData();
+    window.__storeProducts = state.products;
   }
 
   function bindUI() {
