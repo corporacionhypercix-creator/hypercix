@@ -240,6 +240,9 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
 .pcard-btn{display:inline-flex;align-items:center;gap:.35rem;background:transparent;color:var(--r);font-size:.76rem;font-weight:600;padding:.5rem .8rem;border-radius:8px;border:1px solid var(--rs);transition:background .18s,color .18s}
 .pcard-btn:hover{background:var(--r);color:#fff;border-color:var(--r)}
 .pcard-btn svg{width:13px;height:13px}
+.pcard-cotizar{background:var(--r);color:#fff;border:0;border-radius:6px;padding:.45rem .75rem;font-size:.73rem;font-weight:700;cursor:pointer;white-space:nowrap;line-height:1;transition:transform .12s,box-shadow .12s;margin-left:auto}
+.pcard-cotizar:hover{transform:scale(1.06);box-shadow:0 4px 12px rgba(224,18,51,.3)}
+.pcard-cotizar:active{transform:scale(.95)}
 
 .pgrid-empty{grid-column:1/-1;padding:5rem 1rem;text-align:center;color:var(--t3);border:1.5px dashed var(--bdr2);border-radius:16px;background:var(--s1)}
 .pgrid-empty svg{width:60px;height:60px;color:var(--t4);margin:0 auto 1rem;display:block}
@@ -334,6 +337,9 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
   .pcard-price{font-size:.95rem}
   .pcard-btn{padding:.4rem .55rem;font-size:.7rem}
   .pcard-btn span{display:none}
+  .pcard-cotizar{margin-left:auto;background:var(--rs,.red);color:#fff;border:0;border-radius:6px;padding:.35rem .65rem;font-size:.7rem;font-weight:700;cursor:pointer;white-space:nowrap;line-height:1;transition:transform .12s,box-shadow .12s}
+  .pcard-cotizar:hover{transform:scale(1.06);box-shadow:0 3px 10px rgba(224,18,51,.35)}
+  .pcard-cotizar:active{transform:scale(.95)}
   .ft-grid{grid-template-columns:1fr}
   .wsp{width:54px;height:54px;right:14px;bottom:14px}
   .wsp svg{width:26px;height:26px}
@@ -876,6 +882,7 @@ input,select,textarea{font-family:var(--f);color:var(--t1)}
         ratingStars(p.code) +
         '<div class="pcard-foot">' +
           '<div class="pcard-price">' + money(p.price) + '</div>' +
+          '<button class="pcard-cotizar" onclick="event.stopPropagation();addProduct(\'' + esc(p.id) + '\')" title="Agregar a cotización">Cotizar +</button>' +
           '<button class="pcard-btn" onclick="openModal(\'' + esc(p.id) + '\')">' +
             eyeIcon + ' Ver ficha' +
           '</button>' +
