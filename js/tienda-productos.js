@@ -303,4 +303,5 @@
   });
 
   render();
+  window.addEventListener('store-synced', function () { render(); });
 })();

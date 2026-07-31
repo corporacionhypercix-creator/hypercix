@@ -9,7 +9,7 @@
 | Campo | Valor |
 |-------|-------|
 | **Proyecto** | HYPERCIX — Tienda virtual con cotización |
-| **URL prototipo** | https://hypercix.onrender.com |
+| **URL prototipo** | https://www.corporacionhypercix.com |
 | **Tipo de prototipo** | Alta fidelidad (código funcional) |
 | **Pantallas evaluadas** | 3 (Inicio + Catálogo, Modal producto, Carrito/Cotización) |
 | **Fecha de evaluación** | Junio 2026 |
@@ -20,7 +20,7 @@
 ## 2. PROTOTIPO EVALUADO
 
 ### Pantalla 1 — Página principal / Catálogo
-![Pantalla 1](https://hypercix.onrender.com/)
+![Pantalla 1](https://www.corporacionhypercix.com/)
 
 Secciones:
 - **Header** con logo, navegación, búsqueda y carrito
