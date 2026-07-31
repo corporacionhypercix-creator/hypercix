@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HYPERCIX - Resumen del Proyecto</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f7fa; color: #1a1a2e; padding: 2rem; line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 2rem; color: #C62828; margin-bottom: .25rem; display: flex; align-items: center; gap: .75rem; }
+    h1 small { font-size: .9rem; color: #666; font-weight: 400; }
+    .subtitle { color: #666; margin-bottom: 2rem; font-size: 1.05rem; }
+    h2 { font-size: 1.3rem; color: #C62828; margin: 2rem 0 1rem; padding-bottom: .5rem; border-bottom: 2px solid #e8e8e8; }
+    h3 { font-size: 1.05rem; color: #333; margin: 1.2rem 0 .5rem; }
+    .card { background: #fff; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .tag { display: inline-block; padding: .2rem .6rem; border-radius: 6px; font-size: .75rem; font-weight: 600; }
+    .tag-green { background: #e6f7e6; color: #1a7d1a; }
+    .tag-blue { background: #e6f0ff; color: #1a5dcf; }
+    .tag-red { background: #ffe6e6; color: #c62828; }
+    .tag-gray { background: #f0f0f0; color: #555; }
+    ul { list-style: none; padding: 0; }
+    ul li { padding: .35rem 0 .35rem 1.2rem; position: relative; }
+    ul li::before { content: "✓"; position: absolute; left: 0; color: #1a7d1a; font-weight: 700; }
+    .url-box { background: #f0f4ff; border: 1px solid #d0d9f0; border-radius: 8px; padding: .8rem 1rem; font-family: monospace; font-size: .9rem; word-break: break-all; }
+    .url-box a { color: #1a5dcf; text-decoration: none; }
+    .url-box a:hover { text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; margin: .5rem 0; }
+    td, th { padding: .6rem .8rem; text-align: left; border-bottom: 1px solid #eee; font-size: .9rem; }
+    th { background: #f8f9fa; font-weight: 600; color: #555; }
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #ddd; text-align: center; color: #999; font-size: .85rem; }
+    @media(max-width:600px) { .grid { grid-template-columns: 1fr; } body { padding: 1rem; } }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>
+    HYPERCIX
+    <small>Plataforma de Cotización de Seguridad Electrónica</small>
+  </h1>
+  <p class="subtitle">Proyecto completo desplegado en Render — Junio 2026</p>
+
+  <!-- ENLACES -->
+  <div class="card">
+    <h2>Enlaces del proyecto</h2>
+    <div class="grid">
+      <div>
+        <h3> Sitio público</h3>
+        <div class="url-box"><a href="https://hypercix.onrender.com" target="_blank">https://hypercix.onrender.com</a></div>
+      </div>
+      <div>
+        <h3> Panel admin</h3>
+        <div class="url-box"><a href="https://hypercix.onrender.com/admin/login.html" target="_blank">https://hypercix.onrender.com/admin/login.html</a></div>
+        <div style="font-size:.8rem;color:#888;margin-top:.3rem">Usuario: admin / Contraseña: admin123</div>
+      </div>
+      <div>
+        <h3> GitHub</h3>
+        <div class="url-box"><a href="https://github.com/corporacionhypercix-creator/hypercix" target="_blank">github.com/corporacionhypercix-creator/hypercix</a></div>
+      </div>
+      <div>
+        <h3> Servidor (Render)</h3>
+        <div class="url-box">Node.js + SQLite persistente (disco 1GB)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULOS DEL PANEL ADMIN -->
+  <div class="card">
+    <h2>Módulos del panel de control</h2>
+    <table>
+      <tr><th>Módulo</th><th>URL</th><th>Funcionalidad</th></tr>
+      <tr><td> Dashboard</td><td><code>/admin/dashboard.html</code></td><td>Resumen de productos, clientes, cotizaciones</td></tr>
+      <tr><td> Productos</td><td><code>/admin/productos.html</code></td><td>CRUD de productos, imágenes, CSV, filtros</td></tr>
+      <tr><td> Categorías</td><td><code>/admin/categorias.html</code></td><td>CRUD de categorías con descripción</td></tr>
+      <tr><td> Marcas</td><td><code>/admin/marcas.html</code></td><td>CRUD de marcas con logo y color</td></tr>
+      <tr><td> Clientes</td><td><code>/admin/clientes.html</code></td><td>Registro de clientes</td></tr>
+      <tr><td> Cotizaciones</td><td><code>/admin/cotizaciones.html</code></td><td>Gestión de solicitudes de cotización</td></tr>
+      <tr><td> Inventario</td><td><code>/admin/inventario.html</code></td><td>Vista rápida de stock</td></tr>
+      <tr><td> Banners</td><td><code>/admin/banners.html</code></td><td>CRUD de banners promocionales</td></tr>
+      <tr><td> Tipo Cambio</td><td><code>/admin/tipocambio.html</code></td><td>Configuración USD/PEN con historial</td></tr>
+      <tr><td> Configuración</td><td><code>/admin/configuracion.html</code></td><td>Logo, nombre, moneda, impuestos, contacto</td></tr>
+    </table>
+  </div>
+
+  <!-- CARACTERÍSTICAS -->
+  <div class="card">
+    <h2>Características implementadas</h2>
+    <div class="grid">
+      <div>
+        <h3> Tienda pública</h3>
+        <ul>
+          <li>Catálogo de productos con tarjetas</li>
+          <li>Búsqueda por texto, categoría y marca</li>
+          <li>Modal de detalle con imágenes y ficha técnica</li>
+          <li>Botón "Cotizar +" en cada tarjeta</li>
+          <li>Carrito flotante con formulario de cotización</li>
+          <li>Sección de marcas con logos</li>
+          <li>Sincronización cada 15s con el servidor</li>
+          <li>WhatsApp flotante</li>
+          <li>Diseño responsive oscuro</li>
+        </ul>
+      </div>
+      <div>
+        <h3> Panel admin</h3>
+        <ul>
+          <li>Autenticación con tokens</li>
+          <li>CRUD completo de productos, categorías, marcas</li>
+          <li>Importación CSV de productos</li>
+          <li>Gestión de cotizaciones recibidas</li>
+          <li>Configuración de tienda (logo, moneda, impuesto)</li>
+          <li>Tipo de cambio con historial</li>
+          <li>Subida de imágenes (archivo o URL)</li>
+          <li>Tema claro/oscuro</li>
+          <li>Sidebar con navegación completa</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECNOLOGÍA -->
+  <div class="card">
+    <h2>Stack tecnológico</h2>
+    <table>
+      <tr><th>Componente</th><th>Tecnología</th></tr>
+      <tr><td>Frontend</td><td>HTML5, CSS3, JavaScript vanilla</td></tr>
+      <tr><td>Backend</td><td>Node.js + Express</td></tr>
+      <tr><td>Base de datos</td><td>SQLite (archivo persistente en Render)</td></tr>
+      <tr><td>Hosting</td><td>Render.com (plan gratis con disco persistente 1GB)</td></tr>
+      <tr><td>Autenticación</td><td>Tokens en memoria + tabla SQLite</td></tr>
+      <tr><td>Sincronización</td><td>localStorage → PUT /api/store → SQLite</td></tr>
+    </table>
+  </div>
+
+  <!-- CORRECCIONES -->
+  <div class="card">
+    <h2>Correcciones aplicadas</h2>
+    <table>
+      <tr><th>Problema</th><th>Solución</th></tr>
+      <tr><td>Datos se perdían al reiniciar Render</td><td>Disco persistente en render.yaml + sesiones en SQLite</td></tr>
+      <tr><td>Módulos admin sobrescribían datos del servidor con defaults</td><td>Se eliminó escritura de defaults al iniciar; ahora esperan sync del servidor (evento <code>store-synced</code>)</td></tr>
+      <tr><td>Botón "Pagar" confundía usuarios</td><td>Cambiado a "Cotizar"</td></tr>
+      <tr><td>No había botón "Agregar" en tarjetas de producto</td><td>Agregado botón "Cotizar +" con clase <code>btn-buy</code></td></tr>
+      <tr><td>Logo no persistía para todos los visitantes</td><td>Logo URL ahora se guarda en settings del admin y se sirve vía API</td></tr>
+      <tr><td>Menú móvil no funcionaba</td><td>Se agregó event handler al botón hamburguesa</td></tr>
+    </table>
+  </div>
+
+  <!-- ESTADÍSTICAS -->
+  <div class="card">
+    <h2>Estadísticas del proyecto</h2>
+    <div class="grid">
+      <div style="text-align:center;padding:1rem;background:#f8f9fa;border-radius:8px">
+        <div style="font-size:2rem;font-weight:800;color:#C62828">11</div>
+        <div style="font-size:.85rem;color:#666">Módulos admin</div>
+      </div>
+      <div style="text-align:center;padding:1rem;background:#f8f9fa;border-radius:8px">
+        <div style="font-size:2rem;font-weight:800;color:#C62828">9</div>
+        <div style="font-size:.85rem;color:#666">Archivos JS corregidos (race condition)</div>
+      </div>
+      <div style="text-align:center;padding:1rem;background:#f8f9fa;border-radius:8px">
+        <div style="font-size:2rem;font-weight:800;color:#C62828">1</div>
+        <div style="font-size:.85rem;color:#666">Disco persistente 1GB</div>
+      </div>
+      <div style="text-align:center;padding:1rem;background:#f8f9fa;border-radius:8px">
+        <div style="font-size:2rem;font-weight:800;color:#C62828">15s</div>
+        <div style="font-size:.85rem;color:#666">Sincronización automática</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UX -->
+  <div class="card">
+    <h2>Evaluación UX</h2>
+    <p>Se realizó prueba Think-Aloud con 3 usuarios. Archivo: <code>INFORME_UX_HYPERCIX.md</code></p>
+    <table>
+      <tr><th>Problema detectado</th><th>Estado</th></tr>
+      <tr><td>No hay botón "Agregar" en tarjetas</td><td><span class="tag tag-green">Corregido</span></td></tr>
+      <tr><td>Botón "Pagar" engañoso</td><td><span class="tag tag-green">Corregido</span></td></tr>
+      <tr><td>Móvil: menú no funcional</td><td><span class="tag tag-green">Corregido</span></td></tr>
+      <tr><td>Sin confirmación post-cotización</td><td><span class="tag tag-gray">Pendiente</span></td></tr>
+      <tr><td>Sin quantity selector en card</td><td><span class="tag tag-gray">Pendiente</span></td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    HYPERCIX &mdash; Proyecto desarrollado para plataforma de cotización de seguridad electrónica.<br>
+    Desplegado en Render con persistencia de datos. Junio 2026.
+  </div>
+
+</div>
+</body>
+</html>

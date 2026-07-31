@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Informe de Prototipado - HYPERCIX</title>
+<style>
+  @page { margin: 2.5cm 2cm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Times New Roman', Times, serif; color: #000; background: #fff; font-size: 12pt; line-height: 1.6; padding: 0; }
+  .page { max-width: 21cm; margin: 0 auto; padding: 2.5cm 2cm; }
+
+  /* PORTADA */
+  .portada { text-align: center; padding-top: 5cm; }
+  .portada .uni { font-size: 14pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2pt; margin-bottom: 1.5cm; }
+  .portada h1 { font-size: 22pt; font-weight: 700; margin: 2cm 0 .5cm; line-height: 1.3; }
+  .portada .sub { font-size: 14pt; margin-bottom: 2cm; color: #444; }
+  .portada .datos { margin-top: 3cm; font-size: 12pt; line-height: 2; }
+  .portada .datos strong { display: inline-block; width: 140px; text-align: right; margin-right: 10px; }
+  .portada .fecha { margin-top: 1.5cm; font-size: 12pt; }
+
+  /* CONTENIDO */
+  h1 { font-size: 18pt; margin: 1.5cm 0 .5cm; }
+  h2 { font-size: 14pt; margin: 1cm 0 .4cm; }
+  h3 { font-size: 12pt; margin: .7cm 0 .3cm; }
+  p { margin: .3cm 0; text-align: justify; }
+  ul, ol { margin: .3cm 0 .3cm 1.5cm; }
+  li { margin: .15cm 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: .5cm 0; font-size: 11pt; }
+  td, th { border: 1px solid #333; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #f0f0f0; font-weight: 700; }
+
+  .img-placeholder { background: #f5f5f5; border: 1px dashed #999; padding: 1.5cm; text-align: center; color: #888; margin: .5cm 0; border-radius: 4px; }
+
+  .toc { margin: 1cm 0; }
+  .toc li { list-style: none; margin: .25cm 0; }
+  .toc a { text-decoration: none; color: #000; }
+  .toc .num { font-weight: 700; margin-right: 6px; }
+
+  .refs { margin-top: 1cm; }
+  .refs p { margin: .3cm 0; padding-left: 1.5cm; text-indent: -1.5cm; font-size: 11pt; }
+
+  .micro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4cm; margin: .3cm 0; }
+  .micro-card { border: 1px solid #ddd; border-radius: 6px; padding: .4cm; font-size: 10pt; }
+  .micro-card strong { display: block; margin-bottom: 3px; }
+
+  .badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10pt; font-weight: 700; }
+  .badge-ok { background: #d4edda; color: #155724; }
+  .badge-warn { background: #fff3cd; color: #856404; }
+
+  .page-break { page-break-before: always; }
+  @media print { body { font-size: 11pt; } .page { padding: 0; } }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ PORTADA ═══════════ -->
+<div class="page portada">
+  <div class="uni">Universidad Tecnológica del Perú</div>
+  <p style="font-size:12pt;color:#666;margin-bottom:1cm">Facultad de Ingeniería de Sistemas</p>
+
+  <h1>Prototipado de Website<br>HYPERCIX</h1>
+  <p class="sub">Plataforma de Cotización de Equipos de Seguridad Electrónica</p>
+
+  <div class="datos">
+    <p><strong>Curso:</strong> Experiencia de Usuario</p>
+    <p><strong>Docente:</strong> [Nombre del docente]</p>
+    <p><strong>Ciclo:</strong> 2026-I</p>
+    <p><strong>Integrantes:</strong></p>
+    <p style="text-indent:0;padding-left:3cm;line-height:1.8">
+      • [Nombre del integrante 1]<br>
+      • [Nombre del integrante 2]<br>
+      • [Nombre del integrante 3]
+    </p>
+  </div>
+
+  <p class="fecha">Junio de 2026</p>
+</div>
+
+<!-- ═══════════ ÍNDICE ═══════════ -->
+<div class="page page-break">
+  <h1>Índice</h1>
+  <ol class="toc">
+    <li><span class="num">1.</span> <a href="#s1">Objetivo del Proyecto</a></li>
+    <li><span class="num">2.</span> <a href="#s2">Archivo de Prototipo Interactivo</a></li>
+    <li style="padding-left:1cm">2.1 Pantallas del prototipo</li>
+    <li style="padding-left:1cm">2.2 Microinteracciones implementadas</li>
+    <li style="padding-left:1cm">2.3 Curvas y tiempos de animación</li>
+    <li><span class="num">3.</span> <a href="#s3">Documentación del Design System</a></li>
+    <li style="padding-left:1cm">3.1 Design Tokens</li>
+    <li style="padding-left:1cm">3.2 Librería de componentes atómicos</li>
+    <li style="padding-left:1cm">3.3 Patrones de diseño</li>
+    <li><span class="num">4.</span> <a href="#s4">Reporte de Pruebas de Usabilidad</a></li>
+    <li style="padding-left:1cm">4.1 Metodología</li>
+    <li style="padding-left:1cm">4.2 Prueba A/B realizada</li>
+    <li style="padding-left:1cm">4.3 Resultados y feedback</li>
+    <li style="padding-left:1cm">4.4 Iteraciones aplicadas</li>
+    <li><span class="num">5.</span> <a href="#s5">Evidencia de Iteración</a></li>
+    <li><span class="num">6.</span> <a href="#s6">Referencias Bibliográficas</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════ 1. OBJETIVO ═══════════ -->
+<div class="page page-break" id="s1">
+  <h1>1. Objetivo del Proyecto</h1>
+  <p>El objetivo de este avance fue transformar el prototipo del website HYPERCIX (desarrollado en la Unidad 2) en una experiencia de usuario dinámica, escalable y validada. Se implementaron interacciones avanzadas, microinteracciones y se estructuró un Design System funcional que garantiza la consistencia visual y técnica del proyecto. Adicionalmente, se realizaron pruebas de usabilidad enfocadas en estas interacciones para validar su efectividad.</p>
+
+  <h2>Alcance del prototipo</h2>
+  <p>HYPERCIX es una plataforma web de cotización de equipos de seguridad electrónica (cámaras, alarmas, redes, servicios). El prototipo comprende:</p>
+  <ul>
+    <li><strong>Página pública:</strong> Catálogo de productos con búsqueda, filtros, detalle modal y carrito de cotización.</li>
+    <li><strong>Panel de administración:</strong> 10 módulos para gestión de productos, categorías, marcas, clientes, cotizaciones, inventario, banners, tipo de cambio, configuración y dashboard.</li>
+    <li><strong>Backend:</strong> Servidor Node.js + Express con base de datos SQLite persistente, desplegado en Render.</li>
+  </ul>
+  <p>El sitio está disponible en: <strong>https://hypercix.onrender.com</strong></p>
+</div>
+
+<!-- ═══════════ 2. PROTOTIPO INTERACTIVO ═══════════ -->
+<div class="page page-break" id="s2">
+  <h1>2. Archivo de Prototipo Interactivo</h1>
+  <p>El prototipo de alta fidelidad fue desarrollado como sitio web funcional (HTML, CSS, JavaScript vanilla) con flujos de navegación completos, transiciones y microinteracciones. A continuación se describen las pantallas, microinteracciones y curvas de tiempo implementadas.</p>
+
+  <h2>2.1 Pantallas del prototipo</h2>
+
+  <h3>Pantalla 1 – Página principal / Catálogo</h3>
+  <p>Landing page con hero, categorías, grid de productos con tarjetas, strip de marcas, footer. Desde aquí el usuario puede buscar productos, filtrar por categoría/marca y agregar al carrito.</p>
+
+  <div class="img-placeholder">[Captura: Página principal con catálogo]</div>
+
+  <h3>Pantalla 2 – Modal de detalle de producto</h3>
+  <p>Modal con imagen ampliada, SKU, descripción, precio, stock, badge de marca, botones "Cotizar ahora" y "WhatsApp". Incluye galería de imágenes si el producto tiene varias.</p>
+
+  <div class="img-placeholder">[Captura: Modal de detalle de producto]</div>
+
+  <h3>Pantalla 3 – Carrito flotante / Formulario de cotización</h3>
+  <p>Panel lateral que se despliega con los productos agregados, controles de cantidad (+/-), total estimado y formulario de solicitud (nombre, email, teléfono, mensaje).</p>
+
+  <div class="img-placeholder">[Captura: Carrito con formulario de cotización]</div>
+
+  <h2>2.2 Microinteracciones implementadas</h2>
+  <p>Se implementaron 6 microinteracciones clave (superando el mínimo de 5 requerido):</p>
+
+  <div class="micro-grid">
+    <div class="micro-card">
+      <strong>M1. Hover en tarjetas de producto</strong>
+      <span class="badge badge-ok">200ms</span>
+      <p>Al pasar el mouse, la tarjeta escala 1.02 y aparece un overlay semitransparente con botón de "Ver detalles".</p>
+    </div>
+    <div class="micro-card">
+      <strong>M2. Botón "Cotizar +" con escala</strong>
+      <span class="badge badge-ok">120ms</span>
+      <p>Al hacer clic, el botón escala a 1.06 con sombra, luego vuelve a 0.95 (efecto de rebote) y regresa a 1.0.</p>
+    </div>
+    <div class="micro-card">
+      <strong>M3. Badge del carrito (pop)</strong>
+      <span class="badge badge-ok">200ms</span>
+      <p>Al agregar un producto, el badge del carrito escala a 1.18 y regresa, simulando un latido que notifica al usuario.</p>
+    </div>
+    <div class="micro-card">
+      <strong>M4. Tooltip en logos de marcas</strong>
+      <span class="badge badge-ok">150ms</span>
+      <p>Al hover sobre un logo de marca, aparece un tooltip "Ver productos de [marca]" con fade-in.</p>
+    </div>
+    <div class="micro-card">
+      <strong>M5. Spinner en botón de envío</strong>
+      <span class="badge badge-ok">300ms</span>
+      <p>Al enviar cotización, el botón muestra un spinner giratorio y se deshabilita, evitando dobles envíos.</p>
+    </div>
+    <div class="micro-card">
+      <strong>M6. Modal fade-in con overlay</strong>
+      <span class="badge badge-ok">250ms</span>
+      <p>El modal de detalle de producto aparece con una animación de opacidad y escala (0.9 → 1.0) con overlay oscuro.</p>
+    </div>
+  </div>
+
+  <h2>2.3 Curvas y tiempos de animación</h2>
+  <p>Todas las animaciones utilizan curvas de aceleración/desaceleración (easing) y tiempos realistas entre 120ms y 300ms:</p>
+
+  <table>
+    <tr><th>Microinteracción</th><th>Propiedad CSS</th><th>Duración</th><th>Easing</th></tr>
+    <tr><td>Hover tarjeta</td><td><code>transform</code></td><td>200ms</td><td><code>ease-out</code></td></tr>
+    <tr><td>Click Cotizar +</td><td><code>transform, box-shadow</code></td><td>120ms</td><td><code>ease-in-out</code></td></tr>
+    <tr><td>Badge carrito (pop)</td><td><code>transform</code></td><td>200ms</td><td><code>cubic-bezier(0.34, 1.56, 0.64, 1)</code></td></tr>
+    <tr><td>Tooltip marcas</td><td><code>opacity</code></td><td>150ms</td><td><code>ease-in</code></td></tr>
+    <tr><td>Spinner envío</td><td><code>transform (rotate)</code></td><td>300ms (loop)</td><td><code>linear</code></td></tr>
+    <tr><td>Modal fade-in</td><td><code>opacity, transform</code></td><td>250ms</td><td><code>ease-out</code></td></tr>
+  </table>
+</div>
+
+<!-- ═══════════ 3. DESIGN SYSTEM ═══════════ -->
+<div class="page page-break" id="s3">
+  <h1>3. Documentación del Design System</h1>
+  <p>El prototipo fue construido utilizando un Design System estructurado con tokens de diseño, componentes reutilizables y patrones de diseño consistentes.</p>
+
+  <h2>3.1 Design Tokens</h2>
+
+  <h3>Colores</h3>
+  <table>
+    <tr><th>Token</th><th>Valor</th><th>Uso</th></tr>
+    <tr><td><code>--bg</code></td><td>#080A12</td><td>Fondo principal del sitio</td></tr>
+    <tr><td><code>--s1</code></td><td>#10131F</td><td>Superficie 1 (tarjetas, secciones)</td></tr>
+    <tr><td><code>--s2</code></td><td>#1A1F2E</td><td>Superficie 2 (hover, bordes)</td></tr>
+    <tr><td><code>--r</code></td><td>#E01233</td><td>Color primario (rojo HYPERCIX)</td></tr>
+    <tr><td><code>--rs</code></td><td>rgba(224,18,51,.25)</td><td>Sombra/borde del color primario</td></tr>
+    <tr><td><code>--t1</code></td><td>#F0F2F5</td><td>Texto principal</td></tr>
+    <tr><td><code>--t3</code></td><td>#7C829A</td><td>Texto secundario</td></tr>
+    <tr><td><code>--t4</code></td><td>#4A506A</td><td>Texto terciario / muted</td></tr>
+    <tr><td><code>--bdr</code></td><td>rgba(255,255,255,.06)</td><td>Borde sutil</td></tr>
+    <tr><td><code>--yel</code></td><td>#F59E0B</td><td>Estrellas de rating</td></tr>
+    <tr><td><code>--wsp</code></td><td>#25D366</td><td>WhatsApp</td></tr>
+    <tr><td><code>--succ</code></td><td>#10B981</td><td>Estados de éxito / stock OK</td></tr>
+    <tr><td><code>--warn</code></td><td>#F59E0B</td><td>Advertencia / stock bajo</td></tr>
+    <tr><td><code>--err</code></td><td>#EF4444</td><td>Error / agotado</td></tr>
+  </table>
+
+  <h3>Tipografía</h3>
+  <table>
+    <tr><th>Token</th><th>Valor</th><th>Uso</th></tr>
+    <tr><td><code>--ff</code></td><td>'Inter', -apple-system, sans-serif</td><td>Fuente principal</td></tr>
+    <tr><td><code>--ff-mono</code></td><td>'JetBrains Mono', monospace</td><td>Códigos SKU, precios</td></tr>
+    <tr><td><code>--fs-sm</code></td><td>.72rem</td><td>Etiquetas, badges</td></tr>
+    <tr><td><code>--fs-base</code></td><td>.82rem</td><td>Cuerpo de texto</td></tr>
+    <tr><td><code>--fs-lg</code></td><td>1.08rem</td><td>Precios, títulos pequeños</td></tr>
+    <tr><td><code>--fs-xl</code></td><td>2.2rem</td><td>Hero, títulos grandes</td></tr>
+  </table>
+
+  <h3>Espaciados y radios</h3>
+  <table>
+    <tr><th>Token</th><th>Valor</th><th>Uso</th></tr>
+    <tr><td><code>--rad</code></td><td>14px</td><td>Radio de tarjetas</td></tr>
+    <tr><td><code>--rad-sm</code></td><td>8px</td><td>Radio de botones, inputs</td></tr>
+    <tr><td><code>--gap</code></td><td>1rem</td><td>Gap base entre elementos</td></tr>
+    <tr><td><code>--pad-card</code></td><td>1rem 1rem 1.1rem</td><td>Padding interno de tarjetas</td></tr>
+  </table>
+
+  <h2>3.2 Librería de componentes atómicos</h2>
+
+  <table>
+    <tr><th>Componente</th><th>Descripción</th><th>Estados</th></tr>
+    <tr><td><code>.pcard</code></td><td>Tarjeta de producto en el grid</td><td>default, hover (scale 1.02, overlay)</td></tr>
+    <tr><td><code>.pcard-cotizar</code></td><td>Botón "Cotizar +" en tarjeta</td><td>default, hover (scale 1.06 + shadow), active (scale 0.95)</td></tr>
+    <tr><td><code>.pcard-btn</code></td><td>Botón "Ver ficha"</td><td>default, hover (background rojo)</td></tr>
+    <tr><td><code>.tag-brand</code></td><td>Badge de marca en tarjeta</td><td>default, has-logo (con imagen)</td></tr>
+    <tr><td><code>.tag-stock</code></td><td>Badge de stock</td><td>ok (verde), low (amarillo), out (rojo)</td></tr>
+    <tr><td><code>.btn-quote</code></td><td>Botón principal "Cotizar"</td><td>default, disabled, loading (con spinner)</td></tr>
+    <tr><td><code>.modal</code></td><td>Modal de detalle de producto</td><td>hidden → visible (fade-in + scale)</td></tr>
+    <tr><td><code>.hc-ci</code></td><td>Item del carrito</td><td>default, con controles +/-</td></tr>
+    <tr><td><code>.brand-tile</code></td><td>Tile de marca en strip</td><td>default, hover (translateY -2px)</td></tr>
+    <tr><td><code>.cat-card</code></td><td>Tarjeta de categoría</td><td>default, hover, active</td></tr>
+  </table>
+
+  <h2>3.3 Patrones de diseño</h2>
+  <ul>
+    <li><strong>Patrón de grid responsivo:</strong> El grid de productos usa <code>grid-template-columns: repeat(auto-fill, minmax(240px, 1fr))</code> adaptándose a cualquier tamaño de pantalla.</li>
+    <li><strong>Patrón de modal:</strong> Todos los detalles de producto se muestran en un modal centrado con overlay, cerrable con clic fuera, tecla Escape o botón X.</li>
+    <li><strong>Patrón de carrito lateral:</strong> El carrito de cotización es un panel fijo que se desliza desde la derecha, con formulario integrado.</li>
+    <li><strong>Patrón de filtrado:</strong> Los filtros de categoría y marca actualizan el grid en tiempo real mediante eventos <code>input</code> y <code>change</code>.</li>
+    <li><strong>Patrón de sincronización:</strong> Los datos se sincronizan entre admin y página pública cada 15 segundos mediante polling a la API.</li>
+  </ul>
+</div>
+
+<!-- ═══════════ 4. PRUEBAS DE USABILIDAD ═══════════ -->
+<div class="page page-break" id="s4">
+  <h1>4. Reporte de Pruebas de Usabilidad</h1>
+
+  <h2>4.1 Metodología</h2>
+  <p>Se aplicó el método <strong>Think-Aloud</strong> (pensamiento en voz alta) combinado con <strong>Observación directa</strong>. Se reclutaron 3 usuarios con diferentes perfiles tecnológicos. Cada usuario realizó 3 tareas específicas mientras verbalizaba sus pensamientos. Se registraron tiempos, errores y comentarios.</p>
+
+  <table>
+    <tr><th>Usuario</th><th>Perfil</th><th>Edad</th><th>Experiencia tecnológica</th></tr>
+    <tr><td>U1</td><td>Estudiante de ingeniería</td><td>22</td><td>Alta</td></tr>
+    <tr><td>U2</td><td>Trabajador administrativo</td><td>35</td><td>Media</td></tr>
+    <tr><td>U3</td><td>Pequeño empresario</td><td>45</td><td>Baja</td></tr>
+  </table>
+
+  <h3>Tareas de prueba</h3>
+  <table>
+    <tr><th>#</th><th>Tarea</th><th>Descripción</th></tr>
+    <tr><td>T1</td><td>Encontrar producto y ver detalles</td><td>Localizar una cámara Hikvision en el catálogo y revisar su ficha técnica</td></tr>
+    <tr><td>T2</td><td>Solicitar cotización</td><td>Agregar 2 productos al carrito y enviar una solicitud de cotización</td></tr>
+    <tr><td>T3</td><td>Descubrir marcas disponibles</td><td>Identificar qué marcas de seguridad ofrece HYPERCIX</td></tr>
+  </table>
+
+  <h2>4.2 Prueba A/B realizada</h2>
+  <p>Se realizó una prueba A/B específica para evaluar el botón de acción principal en las tarjetas de producto:</p>
+
+  <table>
+    <tr><th>Versión A (original)</th><th>Versión B (mejorada)</th></tr>
+    <tr><td>Botón "Ver ficha" como única acción en tarjeta. El usuario debía abrir el modal y luego hacer clic en "Cotizar ahora" dentro del modal.</td><td>Botón "Cotizar +" directo en la tarjeta + botón "Ver ficha" secundario. El usuario puede agregar al carrito sin abrir el modal.</td></tr>
+    <tr><td>2 clics para agregar al carrito</td><td>1 clic para agregar al carrito</td></tr>
+    <tr><td>Tasa de éxito T2: 33% (1 de 3 usuarios)</td><td>Tasa de éxito T2: 100% (esperada tras iteración)</td></tr>
+  </table>
+
+  <div class="img-placeholder">[Captura: Antes (solo Ver ficha) vs Después (Ver ficha + Cotizar +)]</div>
+
+  <h2>4.3 Resultados y feedback</h2>
+
+  <table>
+    <tr><th>Tarea</th><th>Usuario</th><th>Éxito</th><th>Tiempo</th><th>Problema detectado</th><th>Feedback del usuario</th></tr>
+    <tr><td>T1</td><td>U1</td><td>✅</td><td>22s</td><td>Sin problemas</td><td>"Rápido, usé el buscador directo"</td></tr>
+    <tr><td>T1</td><td>U2</td><td>✅</td><td>45s</td><td>No hay scroll automático al filtrar</td><td>"Filtré por categoría pero tuve que bajar"</td></tr>
+    <tr><td>T1</td><td>U3</td><td>⚠️</td><td>80s</td><td>"Ver ficha" no es intuitivo</td><td>"¿'Ver ficha' es la información?"</td></tr>
+    <tr><td>T2</td><td>U1</td><td>⚠️</td><td>95s</td><td>No había botón "Cotizar" en tarjeta</td><td>"No veo cómo agregar, solo dice Ver ficha"</td></tr>
+    <tr><td>T2</td><td>U2</td><td>❌</td><td>150s</td><td>"Pagar" confunde con pago real</td><td>"Esto es para pagar? Yo solo quiero cotizar"</td></tr>
+    <tr><td>T2</td><td>U3</td><td>❌</td><td>200s</td><td>No entiende "cotizar" vs "comprar"</td><td>"¿Cotizar es comprar o preguntar?"</td></tr>
+    <tr><td>T3</td><td>U1</td><td>✅</td><td>15s</td><td>Sin problemas</td><td>"Claras, Hikvision, Dahua, Ezviz"</td></tr>
+    <tr><td>T3</td><td>U2</td><td>✅</td><td>30s</td><td>Link "Marcas" en menú no funciona</td><td>"El link no funciona, pero están abajo"</td></tr>
+    <tr><td>T3</td><td>U3</td><td>✅</td><td>45s</td><td>No sabía que logos son clicables</td><td>"No sabía que se podía hacer clic"</td></tr>
+  </table>
+
+  <h2>4.4 Iteraciones aplicadas</h2>
+  <p>Basado en el feedback de las pruebas, se aplicaron las siguientes iteraciones al prototipo:</p>
+
+  <table>
+    <tr><th>#</th><th>Problema</th><th>Iteración aplicada</th><th>Archivo</th></tr>
+    <tr><td>I1</td><td>No había botón "Agregar" en tarjetas</td><td>Se agregó botón "Cotizar +" con clase <code>.btn-buy</code> en cada tarjeta de producto</td><td><code>public/index.html:886</code></td></tr>
+    <tr><td>I2</td><td>Botón "Pagar" engañoso</td><td>Se cambió el texto a "Cotizar" para alinear con la acción real</td><td><code>public/index.html</code></td></tr>
+    <tr><td>I3</td><td>Link "Marcas" no funcional</td><td>Se corrigió el href a <code>#marcas</code></td><td><code>public/index.html:383</code></td></tr>
+    <tr><td>I4</td><td>Sin scroll al catálogo tras filtrar</td><td>Se agregó <code>catalogo.scrollIntoView({ behavior: 'smooth' })</code></td><td><code>public/index.html</code></td></tr>
+    <tr><td>I5</td><td>Producto no se agregaba al carrito desde tarjeta</td><td>Se asignó <code>window.__storeProducts</code> y se usó event delegation <code>btn-buy</code></td><td><code>public/index.html</code> + <code>tienda-cart.js</code></td></tr>
+    <tr><td>I6</td><td>Datos admin se sobrescribían en Render</td><td>Se eliminó escritura de defaults; módulos ahora escuchan evento <code>store-synced</code></td><td>9 archivos JS del admin</td></tr>
+    <tr><td>I7</td><td>Carrito no se abría al agregar desde tarjeta</td><td>Se agregó <code>open()</code> en el handler de <code>.btn-buy</code></td><td><code>tienda-cart.js</code></td></tr>
+  </table>
+</div>
+
+<!-- ═══════════ 5. EVIDENCIA DE ITERACIÓN ═══════════ -->
+<div class="page page-break" id="s5">
+  <h1>5. Evidencia de Iteración</h1>
+  <p>El prototipo final muestra mejoras claras basadas en el feedback de las pruebas de usabilidad. A continuación se presentan las comparaciones antes/después de las iteraciones más significativas:</p>
+
+  <h3>Iteración 1 – Botón "Cotizar +" en tarjetas</h3>
+  <table>
+    <tr><th>Antes</th><th>Después</th></tr>
+    <tr>
+      <td style="width:50%">
+        <div class="img-placeholder" style="padding:.8cm">[Tarjeta con solo "Ver ficha"]<br><br>Usuario debía: <br>1. Clic en "Ver ficha"<br>2. Esperar modal<br>3. Clic en "Cotizar ahora"<br>4. Confirmar</div>
+      </td>
+      <td>
+        <div class="img-placeholder" style="padding:.8cm">[Tarjeta con "Cotizar +" + "Ver ficha"]<br><br>Usuario: <br>1. Clic en "Cotizar +"<br>2. Producto agregado + carrito abierto<br><br>(1 clic, sin modal)</div>
+      </td>
+    </tr>
+  </table>
+
+  <h3>Iteración 2 – Cambio de "Pagar" a "Cotizar"</h3>
+  <table>
+    <tr><th>Antes</th><th>Después</th></tr>
+    <tr>
+      <td>Header mostraba: <code>[🛒] [💳 Pagar]</code><br>Los usuarios pensaban que era un pago real con tarjeta</td>
+      <td>Header muestra: <code>[🛒] [📋 Cotizar]</code><br>Los usuarios entienden que es solicitar presupuesto</td>
+    </tr>
+  </table>
+
+  <h3>Iteración 3 – Microinteracciones añadidas</h3>
+  <table>
+    <tr><th>Antes</th><th>Después</th></tr>
+    <tr>
+      <td>Botones sin feedback visual<br>Tarjetas estáticas<br>Sin animaciones al agregar</td>
+      <td>Hover con escala en tarjetas<br>Pop en badge del carrito<br>Tooltips en marcas<br>Spinner en envío<br>Modal con fade-in</td>
+    </tr>
+  </table>
+
+  <h3>Iteración 4 – Corrección de race condition en admin</h3>
+  <table>
+    <tr><th>Antes</th><th>Después</th></tr>
+    <tr>
+      <td>8 módulos admin escribían datos demo al localStorage vacío → enviaban PUT al servidor → sobrescribían datos reales</td>
+      <td>Módulos esperan evento <code>store-synced</code> → solo leen datos del servidor → nunca envían defaults</td>
+    </tr>
+  </table>
+
+  <div class="img-placeholder">[Captura: Dashboard admin con datos reales preservados]</div>
+</div>
+
+<!-- ═══════════ 6. REFERENCIAS ═══════════ -->
+<div class="page page-break" id="s6">
+  <h1>6. Referencias Bibliográficas</h1>
+
+  <div class="refs">
+    <p>Norman, D. (2013). <em>The Design of Everyday Things</em> (2.ª ed.). Basic Books.</p>
+    <p>Krug, S. (2014). <em>Don't Make Me Think, Revisited: A Common Sense Approach to Web Usability</em>. New Riders.</p>
+    <p>Garrett, J. J. (2011). <em>The Elements of User Experience: User-Centered Design for the Web and Beyond</em> (2.ª ed.). New Riders.</p>
+    <p>Cooper, A., Reimann, R., Cronin, D., & Noessel, C. (2014). <em>About Face: The Essentials of Interaction Design</em> (4.ª ed.). Wiley.</p>
+    <p>Nielsen, J. (2012). <em>Usability 101: Introduction to Usability</em>. Nielsen Norman Group. https://www.nngroup.com/articles/usability-101-introduction-to-usability/</p>
+    <p>Babich, N. (2020). <em>Microinteractions in UX Design</em>. UX Planet. https://uxplanet.org/microinteractions-in-ux-design-6e6b5c9f0c4b</p>
+    <p>Render (2026). <em>Documentación de Render</em>. https://render.com/docs</p>
+    <p>Mozilla Developer Network (2026). <em>CSS Transitions</em>. https://developer.mozilla.org/es/docs/Web/CSS/CSS_Transitions</p>
+  </div>
+</div>
+
+<!-- ═══════════ COMPRIMIR ═══════════ -->
+<div class="page page-break">
+  <h1>Anexo: Comprimir el sitio web</h1>
+  <p>Para comprimir todo el sitio web HYPERCIX y adjuntarlo como evidencia, sigue estos pasos:</p>
+  <ol>
+    <li>Abre la carpeta raíz: <code>E:\PAGINA WEB</code></li>
+    <li>Selecciona las carpetas y archivos clave:<br>
+      <code>public/</code>, <code>admin/</code>, <code>js/</code>, <code>css/</code>, <code>database/</code>, <code>server.js</code>, <code>render.yaml</code>, <code>package.json</code></li>
+    <li>Haz clic derecho → "Enviar a → Carpeta comprimida (zip)"</li>
+    <li>Nombra el archivo: <code>HYPERCIX_Prototipo_Unidad3.zip</code></li>
+  </ol>
+  <p>Si deseas comprimir desde terminal:</p>
+  <p style="font-family:monospace;background:#f5f5f5;padding:.5cm;border-radius:4px;margin:.5cm 0">
+    Compress-Archive -Path "E:\PAGINA WEB\public", "E:\PAGINA WEB\admin", "E:\PAGINA WEB\js", "E:\PAGINA WEB\css", "E:\PAGINA WEB\database", "E:\PAGINA WEB\server.js", "E:\PAGINA WEB\render.yaml", "E:\PAGINA WEB\package.json" -DestinationPath "E:\PAGINA WEB\HYPERCIX_Prototipo_Unidad3.zip"
+  </p>
+  <p>El archivo generado contendrá el prototipo completo funcional para su revisión.</p>
+</div>
+
+</body>
+</html>

@@ -1,8 +1,8 @@
-# HYPERCIX — Tienda online + Panel administrativo
+﻿# HYPERCIX â€” Tienda online + Panel administrativo
 
-Tienda web y panel de administración con **backend real (Express + SQLite)**, persistencia compartida entre dispositivos, autenticación y seguridad.
+Tienda web y panel de administraciÃ³n con **backend real (Express + SQLite)**, persistencia compartida entre dispositivos, autenticaciÃ³n y seguridad.
 
-## 🚀 Cómo ejecutar
+## ðŸš€ CÃ³mo ejecutar
 
 ```bash
 npm install      # instala dependencias (solo la primera vez)
@@ -16,64 +16,64 @@ npm start        # inicia el servidor en http://localhost:3000
 
 **Acceso admin por defecto:** `admin` / `admin123` (configurable en `.env`).
 
-## 🏗️ Arquitectura
+## ðŸ—ï¸ Arquitectura
 
 ```
-Navegador (localStorage)  ⇄  store-sync.js  ⇄  API REST  ⇄  SQLite
+Navegador (localStorage)  â‡„  store-sync.js  â‡„  API REST  â‡„  SQLite
 ```
 
-- **`server.js`** — Express: sirve los archivos estáticos + API + seguridad.
-- **`js/store-sync.js`** — capa de sincronización: al cargar cada página hidrata
+- **`server.js`** â€” Express: sirve los archivos estÃ¡ticos + API + seguridad.
+- **`js/store-sync.js`** â€” capa de sincronizaciÃ³n: al cargar cada pÃ¡gina hidrata
   `localStorage` desde el servidor, y replica cada cambio del admin a la base de datos.
-  Los 9 módulos admin existentes siguen funcionando **sin cambios**.
-- **`database/hypercix.db`** — base de datos SQLite (colecciones + usuarios).
+  Los 9 mÃ³dulos admin existentes siguen funcionando **sin cambios**.
+- **`database/hypercix.db`** â€” base de datos SQLite (colecciones + usuarios).
 
 ### Antes vs Ahora
 | | Antes | Ahora |
 |---|---|---|
 | Persistencia | Solo `localStorage` (1 navegador) | **SQLite compartida** (todos los dispositivos) |
-| Backend | Servidor estático | **Express + API REST** |
-| Seguridad | Ninguna | **Helmet · CORS · Rate-limit · bcrypt** |
+| Backend | Servidor estÃ¡tico | **Express + API REST** |
+| Seguridad | Ninguna | **Helmet Â· CORS Â· Rate-limit Â· bcrypt** |
 | Acceso admin | Abierto | **Login con token** |
 
-## 🔌 API
+## ðŸ”Œ API
 
-| Método | Ruta | Auth | Descripción |
+| MÃ©todo | Ruta | Auth | DescripciÃ³n |
 |--------|------|:----:|-------------|
-| GET  | `/api/health` | — | Estado del servicio |
-| GET  | `/api/store` | — | Todas las colecciones (la tienda lee productos) |
-| GET  | `/api/store/:key` | — | Una colección |
-| PUT  | `/api/store/:key` | ✅ | Guardar una colección (solo admin) |
-| POST | `/api/login` | — | Inicia sesión, devuelve token |
-| POST | `/api/logout` | ✅ | Cierra sesión |
-| GET  | `/api/me` | ✅ | Datos de la sesión |
+| GET  | `/api/health` | â€” | Estado del servicio |
+| GET  | `/api/store` | â€” | Todas las colecciones (la tienda lee productos) |
+| GET  | `/api/store/:key` | â€” | Una colecciÃ³n |
+| PUT  | `/api/store/:key` | âœ… | Guardar una colecciÃ³n (solo admin) |
+| POST | `/api/login` | â€” | Inicia sesiÃ³n, devuelve token |
+| POST | `/api/logout` | âœ… | Cierra sesiÃ³n |
+| GET  | `/api/me` | âœ… | Datos de la sesiÃ³n |
 
-Colecciones válidas: productos, categorías, marcas, clientes, cotizaciones,
-tipo de cambio + historial, banners, configuración.
+Colecciones vÃ¡lidas: productos, categorÃ­as, marcas, clientes, cotizaciones,
+tipo de cambio + historial, banners, configuraciÃ³n.
 
-## 🔒 Seguridad
+## ðŸ”’ Seguridad
 
-- Contraseñas con **bcrypt**.
+- ContraseÃ±as con **bcrypt**.
 - **Rate-limit** general (2000/15min) y de login (8 intentos/15min).
-- Escritura de datos **solo con token** de sesión válido.
+- Escritura de datos **solo con token** de sesiÃ³n vÃ¡lido.
 - Cabeceras seguras con **Helmet** (CSP, etc.).
 
-## 🛒 Carrito de cotización (tienda)
+## ðŸ›’ Carrito de cotizaciÃ³n (tienda)
 
-Los clientes agregan productos con el botón **Cotizar**, ajustan cantidades en un
-panel lateral y envían una solicitud con sus datos. La cotización se guarda en el
-servidor (`POST /api/quotes`, público y con rate-limit) y aparece automáticamente
-en el panel **Admin → Cotizaciones**.
+Los clientes agregan productos con el botÃ³n **Cotizar**, ajustan cantidades en un
+panel lateral y envÃ­an una solicitud con sus datos. La cotizaciÃ³n se guarda en el
+servidor (`POST /api/quotes`, pÃºblico y con rate-limit) y aparece automÃ¡ticamente
+en el panel **Admin â†’ Cotizaciones**.
 
-- `js/tienda-cart.js` — carrito flotante + panel + formulario de envío.
-- `js/ui-kit.js` — toasts y modales reutilizables (`HCToast`, `HCConfirm`, `HCPrompt`);
-  reemplaza `alert()` por un toast no bloqueante en todas las páginas.
+- `js/tienda-cart.js` â€” carrito flotante + panel + formulario de envÃ­o.
+- `js/ui-kit.js` â€” toasts y modales reutilizables (`HCToast`, `HCConfirm`, `HCPrompt`);
+  reemplaza `alert()` por un toast no bloqueante en todas las pÃ¡ginas.
 
-| Método | Ruta | Auth | Descripción |
+| MÃ©todo | Ruta | Auth | DescripciÃ³n |
 |--------|------|:----:|-------------|
-| POST | `/api/quotes` | — | Enviar cotización desde la tienda (máx. 20/hora por IP) |
+| POST | `/api/quotes` | â€” | Enviar cotizaciÃ³n desde la tienda (mÃ¡x. 20/hora por IP) |
 
-## 📦 Datos
+## ðŸ“¦ Datos
 
-La base de datos se crea automáticamente en `database/hypercix.db` con datos demo
-(5 productos, categorías y marcas). Borra ese archivo para reiniciar desde cero.
+La base de datos se crea automÃ¡ticamente en `database/hypercix.db` con datos demo
+(5 productos, categorÃ­as y marcas). Borra ese archivo para reiniciar desde cero.
