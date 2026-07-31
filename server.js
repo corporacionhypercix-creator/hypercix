@@ -72,10 +72,8 @@ let pool = null;
 
 function upsertSQL() {
   return DB_DRIVER === 'mysql'
-    ? `INSERT INTO collections (key, data, updated_at) VALUES (?, ?, ?)
-       ON DUPLICATE KEY UPDATE data = VALUES(data), updated_at = VALUES(updated_at)`
-    : `INSERT INTO collections (key, data, updated_at) VALUES (?, ?, ?)
-       ON CONFLICT(key) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at`;
+    ? "INSERT INTO collections (`key`, data, updated_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data), updated_at = VALUES(updated_at)"
+    : 'INSERT INTO collections (key, data, updated_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at';
 }
 
 function initDatabase() {
@@ -205,7 +203,7 @@ function seedDefaults() {
   };
   const now = new Date().toISOString();
   const insertSQL = DB_DRIVER === 'mysql'
-    ? 'INSERT IGNORE INTO collections (key, data, updated_at) VALUES (?, ?, ?)'
+    ? 'INSERT IGNORE INTO collections (`key`, data, updated_at) VALUES (?, ?, ?)'
     : 'INSERT OR IGNORE INTO collections (key, data, updated_at) VALUES (?, ?, ?)';
   Object.entries(seed).forEach(([key, value]) => {
     db.run(insertSQL, [key, JSON.stringify(value), now]);
@@ -268,7 +266,7 @@ app.get('/api/me', requireAuth, (req, res) => {
 // ─── API DE COLECCIONES (store) ───────────────────────
 // Lectura publica (la tienda necesita leer productos sin login)
 app.get('/api/store', (req, res) => {
-  db.all('SELECT key, data FROM collections', (err, rows) => {
+  db.all(DB_DRIVER === 'mysql' ? 'SELECT `key`, data FROM collections' : 'SELECT key, data FROM collections', (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
     const out = {};
     (rows || []).forEach((r) => {
@@ -281,7 +279,7 @@ app.get('/api/store', (req, res) => {
 app.get('/api/store/:key', (req, res) => {
   const { key } = req.params;
   if (!VALID_KEYS.has(key)) return res.status(400).json({ error: 'Clave no permitida' });
-  db.get('SELECT data FROM collections WHERE key = ?', [key], (err, row) => {
+  db.get(DB_DRIVER === 'mysql' ? 'SELECT data FROM collections WHERE `key` = ?' : 'SELECT data FROM collections WHERE key = ?', [key], (err, row) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!row) return res.json(null);
     try { res.json(JSON.parse(row.data)); } catch (e) { res.json(null); }
@@ -345,7 +343,7 @@ app.post('/api/quotes', quoteLimiter, (req, res) => {
   };
 
   const key = 'hypercix-admin-quotes';
-  db.get('SELECT data FROM collections WHERE key = ?', [key], (err, row) => {
+  db.get(DB_DRIVER === 'mysql' ? 'SELECT data FROM collections WHERE `key` = ?' : 'SELECT data FROM collections WHERE key = ?', [key], (err, row) => {
     if (err) return res.status(500).json({ error: err.message });
     let quotes = [];
     if (row) { try { quotes = JSON.parse(row.data) || []; } catch (e) { quotes = []; } }
