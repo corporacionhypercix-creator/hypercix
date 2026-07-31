@@ -36,10 +36,10 @@
   //     sirve este puerto). Si usas Live Server u otro y necesitas apuntar
   //     a un backend diferente, define window.HC_API_BASE antes de este script.
   //   - dominio del backend (onrender.com) -> mismo origen ('')
-  //   - cualquier otro dominio (Cloudflare Pages, dominio propio) -> backend Render
+  //   - cualquier otro dominio (Cloudflare Pages, dominio propio) -> backend propio
   // Para forzar una URL: window.HC_API_BASE = 'https://mi-backend...' (override total).
   // Para cambiar solo el backend de produccion: window.HC_BACKEND_URL = '...'.
-  var BACKEND_URL = (window.HC_BACKEND_URL || 'https://hypercix.onrender.com').replace(/\/+$/, '');
+  var BACKEND_URL = (window.HC_BACKEND_URL || 'https://www.corporacionhypercix.com').replace(/\/+$/, '');
   var API_PORT = '3000';
   var host = location.hostname;
   var isLocal = host === 'localhost' || host === '127.0.0.1' || host === '';
