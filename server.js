@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
+const mysql = require('mysql2');
 const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
@@ -58,12 +59,109 @@ app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, max: 2000 }));
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 8, skipSuccessfulRequests: true });
 
 // ─── BASE DE DATOS ────────────────────────────────────
-const dbPath = path.join(dataDir, 'hypercix.db');
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) return console.error('Error al abrir DB:', err.message);
-  console.log('Conectado a SQLite:', dbPath);
-  initDatabase();
-});
+// DB_DRIVER=sqlite (por defecto, archivo local) | DB_DRIVER=mysql (MariaDB/MySQL)
+const DB_DRIVER = String(process.env.DB_DRIVER || 'sqlite').toLowerCase();
+const DB_HOST = process.env.DB_HOST || '127.0.0.1';
+const DB_PORT = Number(process.env.DB_PORT || 3306);
+const DB_USER = process.env.DB_USER || 'root';
+const DB_PASS = process.env.DB_PASS || '';
+const DB_NAME = process.env.DB_NAME || 'hypercix';
+
+let db;
+let pool = null;
+
+function upsertSQL() {
+  return DB_DRIVER === 'mysql'
+    ? `INSERT INTO collections (key, data, updated_at) VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE data = VALUES(data), updated_at = VALUES(updated_at)`
+    : `INSERT INTO collections (key, data, updated_at) VALUES (?, ?, ?)
+       ON CONFLICT(key) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at`;
+}
+
+function initDatabase() {
+  if (DB_DRIVER === 'mysql') {
+    const conn = mysql.createConnection({ host: DB_HOST, port: DB_PORT, user: DB_USER, password: DB_PASS });
+    conn.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`, (e1) => {
+      conn.end();
+      if (e1) {
+        console.error('Error creando base de datos MySQL:', e1.message);
+        process.exit(1);
+      }
+      pool = mysql.createPool({
+        host: DB_HOST, port: DB_PORT, user: DB_USER, password: DB_PASS,
+        database: DB_NAME, connectionLimit: 10, charset: 'utf8mb4'
+      });
+      db = {
+        get: (sql, params, cb) => pool.query(sql, params, (err, rows) => err ? cb(err) : cb(null, (rows && rows[0]) || undefined)),
+        all: (sql, params, cb) => pool.query(sql, params, (err, rows) => err ? cb(err) : cb(null, rows || [])),
+        run: (sql, params, cb) => pool.query(sql, params, cb || (() => {})),
+        close: (cb) => pool.end(cb)
+      };
+      createTables();
+    });
+  } else {
+    const dbPath = path.join(dataDir, 'hypercix.db');
+    db = new sqlite3.Database(dbPath, (err) => {
+      if (err) return console.error('Error al abrir DB:', err.message);
+      console.log('Conectado a SQLite:', dbPath);
+      createTables();
+    });
+  }
+}
+
+function createTables() {
+  if (DB_DRIVER === 'mysql') {
+    pool.query(`CREATE TABLE IF NOT EXISTS collections (
+      \`key\` VARCHAR(191) PRIMARY KEY,
+      data LONGTEXT NOT NULL,
+      updated_at VARCHAR(50)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+    pool.query(`CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(191) UNIQUE,
+      pass VARCHAR(255),
+      role VARCHAR(50),
+      created_at VARCHAR(50)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+    pool.query(`CREATE TABLE IF NOT EXISTS sessions (
+      token VARCHAR(64) PRIMARY KEY,
+      username VARCHAR(191) NOT NULL,
+      role VARCHAR(50),
+      created_at BIGINT NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`, loadSessions);
+  } else {
+    db.serialize(() => {
+      db.run(`CREATE TABLE IF NOT EXISTS collections (
+        key TEXT PRIMARY KEY,
+        data TEXT NOT NULL,
+        updated_at TEXT
+      )`);
+      db.run(`CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY,
+        username TEXT UNIQUE,
+        pass TEXT,
+        role TEXT,
+        created_at TEXT
+      )`);
+      db.run(`CREATE TABLE IF NOT EXISTS sessions (
+        token TEXT PRIMARY KEY,
+        username TEXT NOT NULL,
+        role TEXT,
+        created_at INTEGER NOT NULL
+      )`, loadSessions);
+    });
+  }
+}
+
+function loadSessions() {
+  db.all('SELECT token, username, role, created_at FROM sessions', (err, rows) => {
+    if (!err && rows) {
+      rows.forEach((r) => sessions.set(r.token, { username: r.username, role: r.role, createdAt: r.created_at }));
+      if (rows.length) console.log('Sesiones cargadas:', rows.length);
+    }
+    seedDefaults();
+  });
+}
 
 // Colecciones validas (mismas claves que usa el front en localStorage)
 const VALID_KEYS = new Set([
@@ -80,43 +178,12 @@ const VALID_KEYS = new Set([
   'hypercix-admin-settings'
 ]);
 
-function initDatabase() {
-  db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS collections (
-      key TEXT PRIMARY KEY,
-      data TEXT NOT NULL,
-      updated_at TEXT
-    )`);
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY,
-      username TEXT UNIQUE,
-      pass TEXT,
-      role TEXT,
-      created_at TEXT
-    )`);
-    // Sesiones persistentes: sobreviven a reinicios/sleeps del free tier.
-    db.run(`CREATE TABLE IF NOT EXISTS sessions (
-      token TEXT PRIMARY KEY,
-      username TEXT NOT NULL,
-      role TEXT,
-      created_at INTEGER NOT NULL
-    )`, () => {
-      // Cargar sesiones existentes a memoria (cache rapida)
-      db.all('SELECT token, username, role, created_at FROM sessions', (err, rows) => {
-        if (!err && rows) {
-          rows.forEach((r) => sessions.set(r.token, { username: r.username, role: r.role, createdAt: r.created_at }));
-          if (rows.length) console.log('Sesiones cargadas:', rows.length);
-        }
-        seedDefaults();
-      });
-    });
-  });
-}
+initDatabase();
 
 function seedDefaults() {
   // Usuario admin por defecto
   db.get('SELECT COUNT(*) AS n FROM users', (err, row) => {
-    if (!err && row.n === 0) {
+    if (!err && row && row.n === 0) {
       const hash = bcrypt.hashSync(process.env.ADMIN_PASS || 'admin123', 10);
       db.run('INSERT INTO users (username, pass, role, created_at) VALUES (?, ?, ?, ?)',
         [process.env.ADMIN_USER || 'admin', hash, 'admin', new Date().toISOString()]);
@@ -137,9 +204,11 @@ function seedDefaults() {
     ]
   };
   const now = new Date().toISOString();
+  const insertSQL = DB_DRIVER === 'mysql'
+    ? 'INSERT IGNORE INTO collections (key, data, updated_at) VALUES (?, ?, ?)'
+    : 'INSERT OR IGNORE INTO collections (key, data, updated_at) VALUES (?, ?, ?)';
   Object.entries(seed).forEach(([key, value]) => {
-    db.run('INSERT OR IGNORE INTO collections (key, data, updated_at) VALUES (?, ?, ?)',
-      [key, JSON.stringify(value), now]);
+    db.run(insertSQL, [key, JSON.stringify(value), now]);
   });
 }
 
@@ -226,8 +295,7 @@ app.put('/api/store/:key', requireAuth, (req, res) => {
   const data = JSON.stringify(req.body === undefined ? null : req.body);
   const now = new Date().toISOString();
   db.run(
-    `INSERT INTO collections (key, data, updated_at) VALUES (?, ?, ?)
-     ON CONFLICT(key) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at`,
+    upsertSQL(),
     [key, data, now],
     (err) => {
       if (err) return res.status(500).json({ error: err.message });
@@ -284,8 +352,7 @@ app.post('/api/quotes', quoteLimiter, (req, res) => {
     quotes.unshift(quote);
     const now = new Date().toISOString();
     db.run(
-      `INSERT INTO collections (key, data, updated_at) VALUES (?, ?, ?)
-       ON CONFLICT(key) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at`,
+      upsertSQL(),
       [key, JSON.stringify(quotes), now],
       (e2) => {
         if (e2) return res.status(500).json({ error: e2.message });
@@ -331,9 +398,10 @@ app.use((req, res) => {
 
 const server = app.listen(PORT, () => {
   const usingDefaultPass = !process.env.ADMIN_PASS;
-  console.log(`\n  HYPERCIX - Servidor Express + SQLite`);
+  console.log(`\n  HYPERCIX - Servidor Express + ${DB_DRIVER === 'mysql' ? 'MySQL' : 'SQLite'}`);
   console.log(`  ───────────────────────────────────`);
   console.log(`  Escuchando en el puerto ${PORT}`);
+  console.log(`  DB: ${DB_DRIVER === 'mysql' ? `${DB_USER}@${DB_HOST}:${DB_PORT}/${DB_NAME}` : 'database/hypercix.db'}`);
   console.log(`  Local:    http://localhost:${PORT}/`);
   console.log(`  Admin:    http://localhost:${PORT}/admin/dashboard.html`);
   console.log(`  Health:   http://localhost:${PORT}/api/health`);
